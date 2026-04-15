@@ -10,7 +10,7 @@
 		<p class="mt-2 text-lg opacity-70">{page.error?.message ?? 'Something went wrong'}</p>
 		<div class="mt-6 flex justify-center gap-3">
 			<a href="/app" class="btn btn-primary">
-				<i class="fa-duotone fa-gauge-high"></i>
+				<i class="fa-solid fa-gauge-high"></i>
 				{m.dashboard()}
 			</a>
 			<button class="btn btn-ghost" onclick={() => history.back()}>

@@ -4,7 +4,7 @@
 </script>
 
 <!-- Navbar -->
-<div class="navbar bg-base-300 px-6 py-3">
+<div class="navbar bg-base-100 px-6 py-3 shadow-md">
 	<div class="flex-1">
 		<a href="/" class="flex items-center gap-2 text-lg font-bold">
 			<i class="fa-duotone fa-warehouse text-primary"></i>
@@ -37,7 +37,7 @@
 				{m.heroSubtitle()}
 			</p>
 			<a href="/app" class="btn mt-6 btn-lg btn-primary">
-				<i class="fa-duotone fa-right-to-bracket"></i>
+				<i class="fa-solid fa-right-to-bracket"></i>
 				{m.openApp()}
 			</a>
 		</div>
@@ -93,7 +93,7 @@
 		</p>
 
 		<a href="https://dmun.de" target="_blank" rel="noopener" class="btn mt-6 btn-sm btn-primary">
-			<i class="fa-duotone fa-globe"></i>
+			<i class="fa-solid fa-globe"></i>
 			{m.learnMoreDmun()}
 		</a>
 	</div>
