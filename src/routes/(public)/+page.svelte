@@ -1,6 +1,21 @@
 <script lang="ts">
 	import Footer from '$lib/components/Footer.svelte';
 	import * as m from '$lib/paraglide/messages';
+	import logisticsImage from '$lib/assets/undraw/logistics.svg';
+	import heavyLiftingImage from '$lib/assets/undraw/heavy-lifting.svg';
+	import collectingImage from '$lib/assets/undraw/collecting.svg';
+	import movingImage from '$lib/assets/undraw/moving.svg';
+	import blob1 from '$lib/assets/blobs/blob_1.svg';
+	import blob2 from '$lib/assets/blobs/blob_2.svg';
+	import blob3 from '$lib/assets/blobs/blob_3.svg';
+	import blob4 from '$lib/assets/blobs/blob_4.svg';
+	import blob5 from '$lib/assets/blobs/blob_5.svg';
+
+	const heroImages = [logisticsImage, heavyLiftingImage, collectingImage, movingImage];
+	const heroImage = heroImages[Math.floor(Math.random() * heroImages.length)];
+
+	const blobs = [blob1, blob2, blob3, blob4, blob5];
+	const blob = blobs[Math.floor(Math.random() * blobs.length)];
 </script>
 
 <!-- Navbar -->
@@ -20,14 +35,17 @@
 </div>
 
 <!-- Hero -->
-<div class="bg-base-300">
-	<div class="mx-auto flex max-w-5xl flex-col items-center gap-8 px-6 py-20 md:flex-row">
-		<div class="flex flex-1 justify-center">
-			<div
-				class="flex h-64 w-64 items-center justify-center rounded-full bg-base-100/10 md:h-80 md:w-80"
-			>
-				<i class="fa-duotone fa-warehouse text-[8rem] text-primary/60"></i>
-			</div>
+<div class="relative overflow-hidden bg-base-300">
+	<div
+		class="relative z-10 mx-auto flex max-w-5xl flex-col items-center gap-8 px-6 py-32 md:flex-row md:py-40"
+	>
+		<div class="relative flex flex-1 justify-center">
+			<img
+				src={blob}
+				alt=""
+				class="absolute top-1/2 left-1/2 z-0 w-[500px] -translate-x-1/2 -translate-y-1/2 opacity-40 dark:opacity-20"
+			/>
+			<img src={heroImage} alt={m.heroTitle()} class="relative z-10 w-72 md:w-96" />
 		</div>
 		<div class="flex-1 text-center md:text-right">
 			<h1 class="text-4xl font-bold md:text-5xl">
@@ -78,7 +96,7 @@
 </div>
 
 <!-- About -->
-<div class="bg-base-300 px-6 py-16">
+<div class="bg-base-100 px-6 py-16">
 	<div class="mx-auto max-w-3xl">
 		<h2 class="mb-6 text-3xl font-bold">
 			{m.aboutTitle()}
