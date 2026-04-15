@@ -50,30 +50,30 @@ The app will be available at `http://localhost:5173`. The mock OIDC login page h
 
 ### Scripts
 
-| Command | Description |
-|---------|-------------|
-| `bun run dev` | Start Docker + dev server |
-| `bun run dev:server` | Dev server only (no Docker) |
-| `bun run build` | Production build |
-| `bun run check` | Svelte + TypeScript type checking |
-| `bun run lint` | Prettier + ESLint check |
-| `bun run format` | Auto-format all files |
+| Command                   | Description                                                 |
+| ------------------------- | ----------------------------------------------------------- |
+| `bun run dev`             | Start Docker + dev server                                   |
+| `bun run dev:server`      | Dev server only (no Docker)                                 |
+| `bun run build`           | Production build                                            |
+| `bun run check`           | Svelte + TypeScript type checking                           |
+| `bun run lint`            | Prettier + ESLint check                                     |
+| `bun run format`          | Auto-format all files                                       |
 | `bun run generate:client` | Generate typed GraphQL client (requires running dev server) |
-| `bun run db:push` | Push Drizzle schema to database |
-| `bun run db:migrate` | Run Drizzle migrations |
-| `bun run db:studio` | Open Drizzle Studio (DB GUI) |
+| `bun run db:push`         | Push Drizzle schema to database                             |
+| `bun run db:migrate`      | Run Drizzle migrations                                      |
+| `bun run db:studio`       | Open Drizzle Studio (DB GUI)                                |
 
 ### Environment Variables
 
 See `.env.example` for all required variables. Key ones:
 
-| Variable | Description |
-|----------|-------------|
-| `DATABASE_URL` | PostgreSQL connection string |
-| `PUBLIC_OIDC_AUTHORITY` | OIDC discovery URL |
-| `PUBLIC_OIDC_CLIENT_ID` | OAuth2 client ID |
-| `OIDC_SCOPES` | OIDC scopes (default includes profile, email) |
-| `OIDC_ROLE_CLAIM` | JWT claim name for roles |
+| Variable                 | Description                                    |
+| ------------------------ | ---------------------------------------------- |
+| `DATABASE_URL`           | PostgreSQL connection string                   |
+| `PUBLIC_OIDC_AUTHORITY`  | OIDC discovery URL                             |
+| `PUBLIC_OIDC_CLIENT_ID`  | OAuth2 client ID                               |
+| `OIDC_SCOPES`            | OIDC scopes (default includes profile, email)  |
+| `OIDC_ROLE_CLAIM`        | JWT claim name for roles                       |
 | `ADMIN_DOMAIN_WHITELIST` | Comma-separated email domains for admin access |
 
 ## FAQ
