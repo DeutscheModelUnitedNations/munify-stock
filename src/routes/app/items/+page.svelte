@@ -15,6 +15,7 @@
 			warningFlag: true,
 			warningFlagNote: true,
 			qrCode: true,
+			aliases: true,
 			type: { name: true },
 			container: { id: true, label: true }
 		});
@@ -28,7 +29,8 @@
 			(item) =>
 				!search ||
 				item.name.toLowerCase().includes(search.toLowerCase()) ||
-				(item.customId ?? '').toLowerCase().includes(search.toLowerCase())
+				(item.customId ?? '').toLowerCase().includes(search.toLowerCase()) ||
+				(item.aliases ?? []).some((a: string) => a.toLowerCase().includes(search.toLowerCase()))
 		)
 	);
 </script>

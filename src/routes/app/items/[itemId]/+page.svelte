@@ -33,7 +33,7 @@
 			location: { id: true, name: true },
 			isTemporarilyMoved: true,
 			temporaryLocation: true,
-			aliases: { id: true, alias: true },
+			aliases: true,
 			comments: {
 				id: true,
 				text: true,
@@ -193,7 +193,7 @@
 						{#if item.customId}
 							<QrCodeDisplay value={`STOCK:item:${item.customId}`} label={item.name} />
 						{:else}
-							<div class="alert alert-warning text-sm">
+							<div class="alert text-sm alert-warning">
 								<i class="fa-solid fa-triangle-exclamation"></i>
 								<span>{m.noCustomIdWarning()}</span>
 							</div>
@@ -222,7 +222,7 @@
 							</h2>
 							<div class="flex flex-wrap gap-2">
 								{#each item.aliases as alias}
-									<span class="badge badge-outline">{alias.alias}</span>
+									<span class="badge badge-outline">{alias}</span>
 								{/each}
 							</div>
 						</div>

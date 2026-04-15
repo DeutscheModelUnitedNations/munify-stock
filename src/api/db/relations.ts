@@ -65,10 +65,6 @@ export const relations = defineRelations(schema, (r) => ({
 			from: r.item.locationId,
 			to: r.location.id
 		}),
-		aliases: r.many.itemAlias({
-			from: r.item.id,
-			to: r.itemAlias.itemId
-		}),
 		comments: r.many.comment({
 			from: r.item.id,
 			to: r.comment.itemId
@@ -76,12 +72,6 @@ export const relations = defineRelations(schema, (r) => ({
 		createdByUser: r.one.user({
 			from: r.item.createdBy,
 			to: r.user.id
-		})
-	},
-	itemAlias: {
-		item: r.one.item({
-			from: r.itemAlias.itemId,
-			to: r.item.id
 		})
 	},
 	flag: {

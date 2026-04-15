@@ -23,7 +23,7 @@
 			name: true,
 			qrCode: true,
 			type: { name: true },
-			aliases: { alias: true }
+			aliases: true
 		});
 		iq.subscribe((v) => {
 			if (v) items = v;
@@ -65,12 +65,7 @@
 				type: 'item',
 				id: item.id,
 				title: item.name,
-				subtitle: [
-					item.customId,
-					item.type?.name,
-					item.qrCode,
-					...(item.aliases?.map((a: any) => a.alias) ?? [])
-				]
+				subtitle: [item.customId, item.type?.name, item.qrCode, ...(item.aliases ?? [])]
 					.filter(Boolean)
 					.join(' · '),
 				icon: 'fa-cube',

@@ -38,7 +38,8 @@ schemaBuilder.mutationFields((t) => ({
 			isTemporarilyMoved: t.arg.boolean(),
 			temporaryLocation: t.arg.string(),
 			warningFlag: t.arg.boolean(),
-			warningFlagNote: t.arg.string()
+			warningFlagNote: t.arg.string(),
+			aliases: t.arg.stringList()
 		},
 		resolve: async (query, _root, args, ctx) => {
 			const user = ctx.mustBeLoggedIn();
@@ -49,9 +50,15 @@ schemaBuilder.mutationFields((t) => ({
 
 			const customId = await resolveCustomId(schema.item, args.customId);
 
+			const { aliases, ...createArgs } = args;
 			const [created] = await db
 				.insert(schema.item)
-				.values({ ...stripNulls(args), customId, createdBy: user.sub })
+				.values({
+					...stripNulls(createArgs),
+					customId,
+					aliases: aliases ?? [],
+					createdBy: user.sub
+				})
 				.returning();
 			await logChange({
 				tableName: 'item',
@@ -85,12 +92,13 @@ schemaBuilder.mutationFields((t) => ({
 			isTemporarilyMoved: t.arg.boolean(),
 			temporaryLocation: t.arg.string(),
 			warningFlag: t.arg.boolean(),
-			warningFlagNote: t.arg.string()
+			warningFlagNote: t.arg.string(),
+			aliases: t.arg.stringList()
 		},
 		resolve: async (query, _root, args, ctx) => {
 			const user = ctx.mustBeLoggedIn();
 
-			const { id, containerId, locationId, ...rest } = args;
+			const { id, containerId, locationId, aliases, ...rest } = args;
 			const cleaned = stripNulls(rest);
 
 			// Mutual exclusivity: setting one clears the other
@@ -106,7 +114,12 @@ schemaBuilder.mutationFields((t) => ({
 
 			await db
 				.update(schema.item)
-				.set({ ...cleaned, ...locationFields, updatedBy: user.sub })
+				.set({
+					...cleaned,
+					...locationFields,
+					...(aliases ? { aliases } : {}),
+					updatedBy: user.sub
+				})
 				.where(eq(schema.item.id, id as string));
 			pubsub.updated(id as string);
 			const result = await db.query.item.findFirst(

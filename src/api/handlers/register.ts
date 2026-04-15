@@ -4,7 +4,6 @@ import './itemType';
 import './containerType';
 import './container';
 import './item';
-import './itemAlias';
 import './comment';
 import './flag';
 import './auditLog';

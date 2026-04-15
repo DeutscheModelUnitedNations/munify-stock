@@ -11,6 +11,8 @@
 	let submitting = $state(false);
 	let placementMode = $state<'container' | 'location'>('container');
 	let isTemporarilyMoved = $state(false);
+	let aliases = $state<string[]>([]);
+	let aliasInput = $state('');
 
 	if (browser) {
 		const typesQuery = client.liveQuery.itemTypes({ id: true, name: true });
@@ -65,7 +67,8 @@
 					quantity,
 					serialNumber,
 					isTemporarilyMoved,
-					temporaryLocation
+					temporaryLocation,
+					aliases
 				},
 				id: true
 			});
@@ -103,6 +106,42 @@
 			<fieldset class="fieldset">
 				<legend class="fieldset-legend">{m.itemDescription()}</legend>
 				<textarea name="description" class="textarea w-full" rows="3"></textarea>
+			</fieldset>
+
+			<fieldset class="fieldset">
+				<legend class="fieldset-legend">{m.aliases()}</legend>
+				{#if aliases.length > 0}
+					<div class="mb-2 flex flex-wrap gap-2">
+						{#each aliases as alias, i}
+							<span class="badge gap-1 badge-outline">
+								{alias}
+								<button
+									type="button"
+									class="btn btn-circle btn-ghost btn-xs"
+									onclick={() => (aliases = aliases.filter((_, idx) => idx !== i))}
+								>
+									<i class="fa-solid fa-xmark text-xs"></i>
+								</button>
+							</span>
+						{/each}
+					</div>
+				{/if}
+				<input
+					type="text"
+					class="input w-full"
+					placeholder={m.aliasPlaceholder()}
+					bind:value={aliasInput}
+					onkeydown={(e) => {
+						if (e.key === 'Enter') {
+							e.preventDefault();
+							const trimmed = aliasInput.trim();
+							if (trimmed && !aliases.includes(trimmed)) {
+								aliases = [...aliases, trimmed];
+								aliasInput = '';
+							}
+						}
+					}}
+				/>
 			</fieldset>
 		</FormFieldset>
 

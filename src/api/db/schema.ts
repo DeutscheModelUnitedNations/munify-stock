@@ -107,6 +107,10 @@ export const item = pgTable(
 		temporaryLocation: text(),
 		warningFlag: boolean().notNull().default(false),
 		warningFlagNote: text(),
+		aliases: text()
+			.array()
+			.notNull()
+			.default(sql`'{}'::text[]`),
 		createdBy: text().references(() => user.id),
 		updatedBy: text().references(() => user.id)
 	},
@@ -117,14 +121,6 @@ export const item = pgTable(
 		)
 	]
 );
-
-export const itemAlias = pgTable('item_alias', {
-	...defaultIdAndTimestamps,
-	itemId: text()
-		.notNull()
-		.references(() => item.id, { onDelete: 'cascade' }),
-	alias: text().notNull()
-});
 
 export const flag = pgTable('flag', {
 	...defaultIdAndTimestamps,

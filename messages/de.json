@@ -93,6 +93,8 @@
 	"information": "Informationen",
 	"description": "Beschreibung",
 	"aliases": "Aliase",
+	"addAlias": "Alias hinzufügen",
+	"aliasPlaceholder": "Alias eingeben und Enter drücken",
 	"noHistoryYet": "Noch kein Verlauf",
 	"noCommentsYet": "Noch keine Kommentare",
 	"created": "Erstellt",
