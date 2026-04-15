@@ -203,5 +203,8 @@
 	"itemsInContainers": "{count} items in containers",
 	"noOnTheMove": "No items or containers currently on the move.",
 	"notAssigned": "Not assigned to a location or container",
-	"temporarilyAt": "Temporarily at: {location}"
+	"temporarilyAt": "Temporarily at: {location}",
+
+	"entries": "Entries",
+	"status": "Status"
 }

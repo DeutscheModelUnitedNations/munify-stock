@@ -55,6 +55,7 @@
 		"@inlang/paraglide-js": "^2.16.0",
 		"@m1212e/rumble": "^0.16.31",
 		"@m1212e/sveltekit-oidc": "^0.0.39",
+		"@tanstack/table-core": "^8.21.3",
 		"@urql/core": "^6.0.1",
 		"@urql/exchange-graphcache": "^9.0.0",
 		"@urql/svelte": "^5.0.0",

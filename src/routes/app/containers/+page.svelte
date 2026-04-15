@@ -1,10 +1,23 @@
 <script lang="ts">
 	import { client } from '$lib/generated-client/client';
 	import { browser } from '$app/environment';
+	import { goto } from '$app/navigation';
 	import * as m from '$lib/paraglide/messages';
+	import {
+		createSvelteTable,
+		FlexRender,
+		getCoreRowModel,
+		getSortedRowModel,
+		getFilteredRowModel,
+		getPaginationRowModel,
+		renderSnippet,
+		type ColumnDef,
+		type SortingState,
+		type PaginationState
+	} from '$lib/components/TanStackTable';
+	import { DataTable } from '$lib/components/TanStackTable/ui';
 	import type { ContainerListView } from '$lib/types/views';
 
-	let search = $state('');
 	let containersList = $state<ContainerListView[]>([]);
 
 	if (browser) {
@@ -24,16 +37,122 @@
 		});
 	}
 
-	const filtered = $derived(
-		containersList.filter(
-			(c) =>
-				!search ||
-				(c.label ?? '').toLowerCase().includes(search.toLowerCase()) ||
-				(c.customId ?? '').toLowerCase().includes(search.toLowerCase()) ||
-				(c.description ?? '').toLowerCase().includes(search.toLowerCase())
-		)
-	);
+	let sorting = $state<SortingState>([]);
+	let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 20 });
+	let globalFilter = $state('');
+
+	const columns: ColumnDef<ContainerListView>[] = [
+		{
+			accessorKey: 'label',
+			header: m.containerLabel(),
+			cell: ({ row }) =>
+				renderSnippet(labelCell, { id: row.original.id, label: row.original.label })
+		},
+		{
+			accessorKey: 'customId',
+			header: m.customId(),
+			cell: ({ row }) => renderSnippet(customIdCell, row.original.customId)
+		},
+		{
+			accessorKey: 'description',
+			header: m.description(),
+			cell: ({ row }) => renderSnippet(descriptionCell, row.original.description)
+		},
+		{
+			id: 'type',
+			accessorFn: (row) => row.type?.name ?? '',
+			header: m.containerType(),
+			cell: ({ row }) => renderSnippet(badgeCell, row.original.type?.name ?? null)
+		},
+		{
+			id: 'location',
+			accessorFn: (row) => row.location?.name ?? '',
+			header: m.location(),
+			cell: ({ row }) => renderSnippet(locationCell, row.original.location?.name ?? null)
+		},
+		{
+			id: 'itemCount',
+			accessorFn: (row) => row.items?.length ?? 0,
+			header: m.items(),
+			cell: ({ row }) => renderSnippet(itemCountCell, row.original.items?.length ?? 0)
+		}
+	];
+
+	const table = createSvelteTable({
+		get data() {
+			return containersList;
+		},
+		columns,
+		state: {
+			get sorting() {
+				return sorting;
+			},
+			get pagination() {
+				return pagination;
+			},
+			get globalFilter() {
+				return globalFilter;
+			}
+		},
+		onSortingChange: (updater) => {
+			sorting = typeof updater === 'function' ? updater(sorting) : updater;
+		},
+		onPaginationChange: (updater) => {
+			pagination = typeof updater === 'function' ? updater(pagination) : updater;
+		},
+		onGlobalFilterChange: (updater) => {
+			globalFilter = typeof updater === 'function' ? updater(globalFilter) : updater;
+		},
+		globalFilterFn: 'includesString',
+		getCoreRowModel: getCoreRowModel(),
+		getSortedRowModel: getSortedRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
+		getPaginationRowModel: getPaginationRowModel()
+	});
 </script>
+
+{#snippet labelCell(props: { id: string; label: string | null })}
+	<a href="/app/containers/{props.id}" class="link font-medium link-hover">
+		<i class="fa-duotone fa-box mr-1 text-primary"></i>
+		{props.label ?? 'Unnamed'}
+	</a>
+{/snippet}
+
+{#snippet customIdCell(customId: string | null)}
+	<span class="font-mono text-xs opacity-70">{customId ?? '--'}</span>
+{/snippet}
+
+{#snippet descriptionCell(description: string | null)}
+	{#if description}
+		<span class="max-w-48 truncate text-sm opacity-70">{description}</span>
+	{:else}
+		<span class="opacity-40">--</span>
+	{/if}
+{/snippet}
+
+{#snippet badgeCell(value: string | null)}
+	{#if value}
+		<span class="badge badge-ghost badge-sm">{value}</span>
+	{:else}
+		<span class="opacity-40">--</span>
+	{/if}
+{/snippet}
+
+{#snippet locationCell(locationName: string | null)}
+	{#if locationName}
+		<span class="badge badge-outline badge-sm">
+			<i class="fa-solid fa-location-dot mr-1"></i>{locationName}
+		</span>
+	{:else}
+		<span class="opacity-40">--</span>
+	{/if}
+{/snippet}
+
+{#snippet itemCountCell(count: number)}
+	<span class="badge badge-sm badge-info">
+		<i class="fa-solid fa-cubes mr-1"></i>{m.itemsInContainer({ count })}
+	</span>
+{/snippet}
 
 <div class="flex flex-col gap-4">
 	<div class="flex flex-wrap items-center justify-between gap-3">
@@ -49,49 +168,71 @@
 	<div class="flex gap-2">
 		<label class="input-bordered input flex flex-1 items-center gap-2">
 			<i class="fa-solid fa-magnifying-glass opacity-50"></i>
-			<input type="text" class="grow" placeholder={m.searchContainers()} bind:value={search} />
+			<input
+				type="text"
+				class="grow"
+				placeholder={m.searchContainers()}
+				value={globalFilter}
+				oninput={(e) => {
+					globalFilter = e.currentTarget.value;
+					pagination = { ...pagination, pageIndex: 0 };
+				}}
+			/>
 		</label>
 	</div>
 
-	<div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-		{#each filtered as container}
-			<a
-				href="/app/containers/{container.id}"
-				class="card bg-base-100 shadow-sm transition hover:shadow-md"
-			>
-				<div class="card-body">
-					<h2 class="card-title">
-						<i class="fa-duotone fa-box text-primary"></i>
-						{container.label ?? 'Unnamed'}
-					</h2>
-					{#if container.description}
-						<p class="text-sm opacity-70">{container.description}</p>
-					{/if}
-					<div class="flex flex-wrap gap-2 text-xs">
-						{#if container.type}
-							<span class="badge badge-ghost badge-sm">{container.type.name}</span>
+	<DataTable.Root class="table-zebra">
+		<DataTable.Header>
+			{#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
+				<tr>
+					{#each headerGroup.headers as header (header.id)}
+						<DataTable.Head>
+							{#if !header.isPlaceholder}
+								<button
+									class="flex items-center gap-2"
+									class:cursor-pointer={header.column.getCanSort()}
+									onclick={() => header.column.toggleSorting()}
+								>
+									<FlexRender
+										content={header.column.columnDef.header}
+										context={header.getContext()}
+									/>
+									{#if header.column.getIsSorted() === 'asc'}
+										<i class="fa-duotone fa-arrow-down-a-z text-xs"></i>
+									{:else if header.column.getIsSorted() === 'desc'}
+										<i class="fa-duotone fa-arrow-down-z-a text-xs"></i>
+									{:else if header.column.getCanSort()}
+										<i class="fa-duotone fa-arrows-up-down text-xs opacity-30"></i>
+									{/if}
+								</button>
+							{/if}
+						</DataTable.Head>
+					{/each}
+				</tr>
+			{/each}
+		</DataTable.Header>
+		<DataTable.Body>
+			{#each table.getRowModel().rows as row (row.id)}
+				<DataTable.Row onclick={() => goto('/app/containers/' + row.original.id)}>
+					{#each row.getVisibleCells() as cell (cell.id)}
+						<DataTable.Cell>
+							<FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
+						</DataTable.Cell>
+					{/each}
+				</DataTable.Row>
+			{:else}
+				<tr>
+					<td colspan={columns.length} class="text-center opacity-50">
+						{#if globalFilter}
+							{m.noContainersMatching({ query: globalFilter })}
+						{:else}
+							{m.noContainersYet()}
 						{/if}
-						{#if container.location}
-							<span class="badge badge-outline badge-sm">
-								<i class="fa-solid fa-location-dot mr-1"></i>{container.location.name}
-							</span>
-						{/if}
-						<span class="badge badge-sm badge-info">
-							<i class="fa-solid fa-cubes mr-1"></i>{m.itemsInContainer({
-								count: container.items?.length ?? 0
-							})}
-						</span>
-					</div>
-				</div>
-			</a>
-		{:else}
-			<p class="col-span-full text-center opacity-50">
-				{#if search}
-					{m.noContainersMatching({ query: search })}
-				{:else}
-					{m.noContainersYet()}
-				{/if}
-			</p>
-		{/each}
-	</div>
+					</td>
+				</tr>
+			{/each}
+		</DataTable.Body>
+	</DataTable.Root>
+
+	<DataTable.Pagination {table} />
 </div>

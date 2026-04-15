@@ -203,5 +203,8 @@
 	"itemsInContainers": "{count} Artikel in Behältern",
 	"noOnTheMove": "Keine Artikel oder Behälter aktuell unterwegs.",
 	"notAssigned": "Keinem Standort oder Behälter zugeordnet",
-	"temporarilyAt": "Vorübergehend: {location}"
+	"temporarilyAt": "Vorübergehend: {location}",
+
+	"entries": "Einträge",
+	"status": "Status"
 }
