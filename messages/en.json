@@ -180,5 +180,22 @@
 	"leaveEmptyForIndividual": "Leave empty for individual item",
 	"noType": "-- No type --",
 	"noContainer": "-- No container --",
-	"noLocation": "-- No location --"
+	"noLocation": "-- No location --",
+
+	"locationOverview": "Location Overview",
+	"noLocationsOnDashboard": "No locations created yet.",
+	"itemsAtLocation": "{count} items",
+
+	"placementMode": "Placement",
+	"inContainer": "In container",
+	"atLocation": "At location",
+	"temporarilyMoved": "Temporarily moved",
+	"temporaryLocation": "Temporary location",
+	"temporaryLocationPlaceholder": "e.g. At Sarah's home",
+	"onTheMove": "On the Move",
+	"soloItemsAtLocation": "{count} solo items",
+	"itemsInContainers": "{count} items in containers",
+	"noOnTheMove": "No items or containers currently on the move.",
+	"notAssigned": "Not assigned to a location or container",
+	"temporarilyAt": "Temporarily at: {location}"
 }

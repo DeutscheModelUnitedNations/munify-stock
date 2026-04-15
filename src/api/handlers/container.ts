@@ -27,14 +27,16 @@ schemaBuilder.mutationFields((t) => ({
 			description: t.arg.string(),
 			locationId: t.arg.id(),
 			locationDetail: t.arg.string(),
-			qrCode: t.arg.string()
+			qrCode: t.arg.string(),
+			isTemporarilyMoved: t.arg.boolean(),
+			temporaryLocation: t.arg.string()
 		},
 		resolve: async (query, _root, args, ctx) => {
 			const user = ctx.mustBeLoggedIn();
 
 			const [created] = await db
 				.insert(schema.container)
-				.values({ ...args, createdBy: user.sub })
+				.values({ ...stripNulls(args), createdBy: user.sub })
 				.returning();
 			await logChange({
 				tableName: 'container',
@@ -58,7 +60,9 @@ schemaBuilder.mutationFields((t) => ({
 			description: t.arg.string(),
 			locationId: t.arg.id(),
 			locationDetail: t.arg.string(),
-			qrCode: t.arg.string()
+			qrCode: t.arg.string(),
+			isTemporarilyMoved: t.arg.boolean(),
+			temporaryLocation: t.arg.string()
 		},
 		resolve: async (query, _root, args, ctx) => {
 			ctx.mustBeLoggedIn();

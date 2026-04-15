@@ -26,7 +26,12 @@
 			createdAt: true,
 			updatedAt: true,
 			type: { id: true, name: true },
-			container: { id: true, number: true, description: true },
+			containerId: true,
+		container: { id: true, number: true, description: true, location: { id: true, name: true } },
+		locationId: true,
+		location: { id: true, name: true },
+		isTemporarilyMoved: true,
+		temporaryLocation: true,
 			aliases: { id: true, alias: true },
 			comments: {
 				id: true,
@@ -57,6 +62,13 @@
 
 {#if item}
 	<div class="flex flex-col gap-4">
+		{#if item.isTemporarilyMoved}
+			<div class="alert alert-warning">
+				<i class="fa-solid fa-person-walking-luggage"></i>
+				<span>{m.temporarilyAt({ location: item.temporaryLocation ?? '' })}</span>
+			</div>
+		{/if}
+
 		<div class="flex items-center gap-3">
 			<a href="/app/items" class="btn btn-ghost btn-sm" aria-label="Back to items">
 				<i class="fa-solid fa-arrow-left"></i>
@@ -141,17 +153,28 @@
 				<div class="card bg-base-100 shadow-sm">
 					<div class="card-body">
 						<h2 class="card-title text-sm opacity-70">
-							<i class="fa-duotone fa-box"></i>
-							{m.itemContainer()}
+							<i class="fa-duotone fa-location-dot"></i>
+							{m.location()}
 						</h2>
 						{#if item.container}
-							<a href="/app/containers/{item.container.id}" class="link link-primary">
-								{item.container.number ?? 'Unnamed'}{item.container.description
-									? ` - ${item.container.description}`
-									: ''}
-							</a>
+							<div class="flex flex-col gap-1">
+								{#if item.container.location}
+									<span class="text-sm opacity-70">{item.container.location.name}</span>
+								{/if}
+								<a href="/app/containers/{item.container.id}" class="link link-primary">
+									<i class="fa-solid fa-box mr-1"></i>
+									{item.container.number ?? 'Unnamed'}{item.container.description
+										? ` - ${item.container.description}`
+										: ''}
+								</a>
+							</div>
+						{:else if item.location}
+							<span>
+								<i class="fa-solid fa-location-dot mr-1 text-primary"></i>
+								{item.location.name}
+							</span>
 						{:else}
-							<span class="opacity-40">{m.notAssignedToContainer()}</span>
+							<span class="opacity-40">{m.notAssigned()}</span>
 						{/if}
 					</div>
 				</div>

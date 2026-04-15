@@ -16,6 +16,8 @@
 			qrCode: true,
 			locationDetail: true,
 			createdAt: true,
+			isTemporarilyMoved: true,
+			temporaryLocation: true,
 			type: { id: true, name: true },
 			location: { id: true, name: true },
 			items: {
@@ -34,6 +36,13 @@
 
 {#if container}
 	<div class="flex flex-col gap-4">
+		{#if container.isTemporarilyMoved}
+			<div class="alert alert-warning">
+				<i class="fa-solid fa-person-walking-luggage"></i>
+				<span>{m.temporarilyAt({ location: container.temporaryLocation ?? '' })}</span>
+			</div>
+		{/if}
+
 		<div class="flex items-center gap-3">
 			<a href="/app/containers" class="btn btn-ghost btn-sm" aria-label="Back to containers">
 				<i class="fa-solid fa-arrow-left"></i>

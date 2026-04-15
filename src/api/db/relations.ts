@@ -16,6 +16,10 @@ export const relations = defineRelations(schema, (r) => ({
 		containers: r.many.container({
 			from: r.location.id,
 			to: r.container.locationId
+		}),
+		directItems: r.many.item({
+			from: r.location.id,
+			to: r.item.locationId
 		})
 	},
 	itemType: {
@@ -56,6 +60,10 @@ export const relations = defineRelations(schema, (r) => ({
 		container: r.one.container({
 			from: r.item.containerId,
 			to: r.container.id
+		}),
+		location: r.one.location({
+			from: r.item.locationId,
+			to: r.location.id
 		}),
 		aliases: r.many.itemAlias({
 			from: r.item.id,

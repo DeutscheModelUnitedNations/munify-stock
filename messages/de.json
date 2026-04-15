@@ -180,5 +180,22 @@
 	"leaveEmptyForIndividual": "Leer lassen für Einzelartikel",
 	"noType": "-- Kein Typ --",
 	"noContainer": "-- Kein Behälter --",
-	"noLocation": "-- Kein Standort --"
+	"noLocation": "-- Kein Standort --",
+
+	"locationOverview": "Standort-Übersicht",
+	"noLocationsOnDashboard": "Noch keine Standorte angelegt.",
+	"itemsAtLocation": "{count} Artikel",
+
+	"placementMode": "Platzierung",
+	"inContainer": "In Behälter",
+	"atLocation": "Am Standort",
+	"temporarilyMoved": "Vorübergehend umgelagert",
+	"temporaryLocation": "Vorübergehender Standort",
+	"temporaryLocationPlaceholder": "z.B. Bei Sarah zu Hause",
+	"onTheMove": "Unterwegs",
+	"soloItemsAtLocation": "{count} Einzelartikel",
+	"itemsInContainers": "{count} Artikel in Behältern",
+	"noOnTheMove": "Keine Artikel oder Behälter aktuell unterwegs.",
+	"notAssigned": "Keinem Standort oder Behälter zugeordnet",
+	"temporarilyAt": "Vorübergehend: {location}"
 }

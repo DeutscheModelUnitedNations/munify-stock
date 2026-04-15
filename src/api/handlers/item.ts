@@ -31,12 +31,19 @@ schemaBuilder.mutationFields((t) => ({
 			qrCode: t.arg.string(),
 			quantity: t.arg.int(),
 			containerId: t.arg.id(),
+			locationId: t.arg.id(),
 			locationDetail: t.arg.string(),
+			isTemporarilyMoved: t.arg.boolean(),
+			temporaryLocation: t.arg.string(),
 			warningFlag: t.arg.boolean(),
 			warningFlagNote: t.arg.string()
 		},
 		resolve: async (query, _root, args, ctx) => {
 			const user = ctx.mustBeLoggedIn();
+
+			if (args.containerId && args.locationId) {
+				throw new Error('An item cannot have both a container and a direct location');
+			}
 
 			const [created] = await db
 				.insert(schema.item)
@@ -68,17 +75,33 @@ schemaBuilder.mutationFields((t) => ({
 			qrCode: t.arg.string(),
 			quantity: t.arg.int(),
 			containerId: t.arg.id(),
+			locationId: t.arg.id(),
 			locationDetail: t.arg.string(),
+			isTemporarilyMoved: t.arg.boolean(),
+			temporaryLocation: t.arg.string(),
 			warningFlag: t.arg.boolean(),
 			warningFlagNote: t.arg.string()
 		},
 		resolve: async (query, _root, args, ctx) => {
 			const user = ctx.mustBeLoggedIn();
 
-			const { id, ...updates } = args;
+			const { id, containerId, locationId, ...rest } = args;
+			const cleaned = stripNulls(rest);
+
+			// Mutual exclusivity: setting one clears the other
+			const locationFields: Record<string, unknown> = {};
+			if (containerId !== null && containerId !== undefined) {
+				locationFields.containerId = containerId;
+				locationFields.locationId = null;
+			}
+			if (locationId !== null && locationId !== undefined) {
+				locationFields.locationId = locationId;
+				locationFields.containerId = null;
+			}
+
 			await db
 				.update(schema.item)
-				.set({ ...stripNulls(updates), updatedBy: user.sub })
+				.set({ ...cleaned, ...locationFields, updatedBy: user.sub })
 				.where(eq(schema.item.id, id as string));
 			pubsub.updated(id as string);
 			const result = await db.query.item.findFirst(

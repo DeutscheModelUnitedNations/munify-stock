@@ -1,5 +1,6 @@
 import { nanoid } from '../../lib/helpers/nanoid';
-import { pgTable, text, timestamp, pgEnum, boolean, integer, serial } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, pgEnum, boolean, integer, serial, check } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
 
 const defaultTimestamps = {
 	createdAt: timestamp().defaultNow().notNull(),
@@ -71,26 +72,40 @@ export const container = pgTable('container', {
 	locationId: text().references(() => location.id),
 	locationDetail: text(),
 	qrCode: text().unique(),
+	isTemporarilyMoved: boolean().notNull().default(false),
+	temporaryLocation: text(),
 	createdBy: text().references(() => user.id)
 });
 
-export const item = pgTable('item', {
-	...defaultIdAndTimestamps,
-	name: text().notNull(),
-	typeId: text().references(() => itemType.id),
-	description: text(),
-	photo: text(),
-	serialNumber: text(),
-	value: integer(),
-	qrCode: text().unique(),
-	quantity: integer(),
-	containerId: text().references(() => container.id),
-	locationDetail: text(),
-	warningFlag: boolean().notNull().default(false),
-	warningFlagNote: text(),
-	createdBy: text().references(() => user.id),
-	updatedBy: text().references(() => user.id)
-});
+export const item = pgTable(
+	'item',
+	{
+		...defaultIdAndTimestamps,
+		name: text().notNull(),
+		typeId: text().references(() => itemType.id),
+		description: text(),
+		photo: text(),
+		serialNumber: text(),
+		value: integer(),
+		qrCode: text().unique(),
+		quantity: integer(),
+		containerId: text().references(() => container.id),
+		locationId: text().references(() => location.id),
+		locationDetail: text(),
+		isTemporarilyMoved: boolean().notNull().default(false),
+		temporaryLocation: text(),
+		warningFlag: boolean().notNull().default(false),
+		warningFlagNote: text(),
+		createdBy: text().references(() => user.id),
+		updatedBy: text().references(() => user.id)
+	},
+	() => [
+		check(
+			'item_location_exclusivity',
+			sql`NOT ("container_id" IS NOT NULL AND "location_id" IS NOT NULL)`
+		)
+	]
+);
 
 export const itemAlias = pgTable('item_alias', {
 	...defaultIdAndTimestamps,
