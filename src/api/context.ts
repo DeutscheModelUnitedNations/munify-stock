@@ -5,20 +5,21 @@ import { GraphQLError } from 'graphql';
 export const oidcRoles = ['admin', 'member'] as const;
 
 export async function context(req: RequestEvent) {
-	const OIDCRoleNames: (typeof oidcRoles)[number][] = [];
+	const OIDCRoleNames: string[] = [];
 	if (configPrivate.OIDC_ROLE_CLAIM) {
+		const tokenData = (req.locals.oidc?.accessToken ?? {}) as Record<string, unknown>;
+		const idTokenData = (req.locals.oidc?.idToken ?? {}) as Record<string, unknown>;
 		const rolesRaw =
-			(req.locals.oidc?.accessToken ?? ({} as any))[configPrivate.OIDC_ROLE_CLAIM] ??
-			(req.locals.oidc?.idToken ?? ({} as any))[configPrivate.OIDC_ROLE_CLAIM];
+			tokenData[configPrivate.OIDC_ROLE_CLAIM] ?? idTokenData[configPrivate.OIDC_ROLE_CLAIM];
 		if (rolesRaw) {
 			// Support both Logto format (array of role objects/strings) and Zitadel format (object with role keys)
 			if (Array.isArray(rolesRaw)) {
 				for (const role of rolesRaw) {
-					const name = typeof role === 'string' ? role : role?.name;
-					if (name) OIDCRoleNames.push(name as any);
+					const name = typeof role === 'string' ? role : (role as Record<string, unknown>)?.name;
+					if (typeof name === 'string') OIDCRoleNames.push(name);
 				}
 			} else if (typeof rolesRaw === 'object') {
-				OIDCRoleNames.push(...(Object.keys(rolesRaw) as any));
+				OIDCRoleNames.push(...Object.keys(rolesRaw as Record<string, unknown>));
 			}
 		}
 	}
@@ -33,7 +34,7 @@ export async function context(req: RequestEvent) {
 			return req.locals.oidc.user;
 		},
 		hasRole(role: string) {
-			return OIDCRoleNames.includes(role as any);
+			return OIDCRoleNames.includes(role);
 		}
 	};
 }

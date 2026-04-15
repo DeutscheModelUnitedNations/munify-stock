@@ -2,12 +2,19 @@
 	import { client } from '$lib/generated-client/client';
 	import { browser } from '$app/environment';
 	import * as m from '$lib/paraglide/messages';
+	import type {
+		DashboardItemView,
+		DashboardContainerView,
+		IdView,
+		DashboardAuditLogView,
+		DashboardLocationView
+	} from '$lib/types/views';
 
-	let itemsList = $state<any[]>([]);
-	let containersList = $state<any[]>([]);
-	let flagsList = $state<any[]>([]);
-	let auditLogsList = $state<any[]>([]);
-	let locationsList = $state<any[]>([]);
+	let itemsList = $state<DashboardItemView[]>([]);
+	let containersList = $state<DashboardContainerView[]>([]);
+	let flagsList = $state<IdView[]>([]);
+	let auditLogsList = $state<DashboardAuditLogView[]>([]);
+	let locationsList = $state<DashboardLocationView[]>([]);
 
 	if (browser) {
 		const items = client.liveQuery.items({
@@ -150,7 +157,10 @@
 					{#each locationsList as loc}
 						{@const containerCount = loc.containers?.length ?? 0}
 						{@const itemsInContainersCount =
-							loc.containers?.reduce((sum: number, c: any) => sum + (c.items?.length ?? 0), 0) ?? 0}
+							loc.containers?.reduce(
+								(sum: number, c: { id: string; items: IdView[] }) => sum + (c.items?.length ?? 0),
+								0
+							) ?? 0}
 						{@const soloItemCount = loc.directItems?.length ?? 0}
 						<a
 							href="/app/admin/locations"

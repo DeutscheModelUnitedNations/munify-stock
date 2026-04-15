@@ -5,8 +5,10 @@
 	import FormFieldset from '$lib/components/FormFieldset.svelte';
 	import * as m from '$lib/paraglide/messages';
 
-	let containerTypes = $state<any[]>([]);
-	let locations = $state<any[]>([]);
+	import type { NamedView } from '$lib/types/views';
+
+	let containerTypes = $state<NamedView[]>([]);
+	let locations = $state<NamedView[]>([]);
 	let submitting = $state(false);
 
 	if (browser) {

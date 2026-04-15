@@ -5,9 +5,11 @@
 	import FormFieldset from '$lib/components/FormFieldset.svelte';
 	import * as m from '$lib/paraglide/messages';
 
-	let itemTypes = $state<any[]>([]);
-	let containers = $state<any[]>([]);
-	let locations = $state<any[]>([]);
+	import type { NamedView, ContainerFormView } from '$lib/types/views';
+
+	let itemTypes = $state<NamedView[]>([]);
+	let containers = $state<ContainerFormView[]>([]);
+	let locations = $state<NamedView[]>([]);
 	let submitting = $state(false);
 	let placementMode = $state<'container' | 'location'>('container');
 	let isTemporarilyMoved = $state(false);
@@ -119,6 +121,7 @@
 									type="button"
 									class="btn btn-circle btn-ghost btn-xs"
 									onclick={() => (aliases = aliases.filter((_, idx) => idx !== i))}
+									aria-label={m.delete()}
 								>
 									<i class="fa-solid fa-xmark text-xs"></i>
 								</button>

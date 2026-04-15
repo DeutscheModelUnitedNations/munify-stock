@@ -4,7 +4,9 @@
 	import { goto } from '$app/navigation';
 	import * as m from '$lib/paraglide/messages';
 
-	let sessions = $state<any[]>([]);
+	import type { InventorySessionListView } from '$lib/types/views';
+
+	let sessions = $state<InventorySessionListView[]>([]);
 	let creating = $state(false);
 
 	if (browser) {
@@ -50,10 +52,10 @@
 		}
 	}
 
-	function sessionProgress(session: any) {
+	function sessionProgress(session: InventorySessionListView) {
 		const checks = session.checks ?? [];
 		if (checks.length === 0) return { done: 0, total: 0 };
-		const done = checks.filter((c: any) => c.status === 'COMPLETED').length;
+		const done = checks.filter((c) => c.status === 'COMPLETED').length;
 		return { done, total: checks.length };
 	}
 </script>

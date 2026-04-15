@@ -3,7 +3,9 @@
 	import { browser } from '$app/environment';
 	import * as m from '$lib/paraglide/messages';
 
-	let users = $state<any[]>([]);
+	import type { UserView } from '$lib/types/views';
+
+	let users = $state<UserView[]>([]);
 
 	if (browser) {
 		const q = client.liveQuery.users({

@@ -4,8 +4,10 @@
 	import FormFieldset from '$lib/components/FormFieldset.svelte';
 	import * as m from '$lib/paraglide/messages';
 
-	let itemTypes = $state<any[]>([]);
-	let containerTypes = $state<any[]>([]);
+	import type { NamedDescView } from '$lib/types/views';
+
+	let itemTypes = $state<NamedDescView[]>([]);
+	let containerTypes = $state<NamedDescView[]>([]);
 	let newItemType = $state('');
 	let newContainerType = $state('');
 	let submittingItem = $state(false);
@@ -87,7 +89,11 @@
 							<i class="fa-duotone fa-tag text-primary"></i>
 							<span class="text-sm font-medium">{type.name}</span>
 						</div>
-						<button class="btn text-error btn-ghost btn-xs" onclick={() => deleteItemType(type.id)}>
+						<button
+							class="btn text-error btn-ghost btn-xs"
+							onclick={() => deleteItemType(type.id)}
+							aria-label={m.delete()}
+						>
 							<i class="fa-solid fa-trash"></i>
 						</button>
 					</div>
@@ -131,6 +137,7 @@
 						<button
 							class="btn text-error btn-ghost btn-xs"
 							onclick={() => deleteContainerType(type.id)}
+							aria-label={m.delete()}
 						>
 							<i class="fa-solid fa-trash"></i>
 						</button>

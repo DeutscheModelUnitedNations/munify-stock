@@ -2,9 +2,10 @@
 	import { client } from '$lib/generated-client/client';
 	import { browser } from '$app/environment';
 	import * as m from '$lib/paraglide/messages';
+	import type { ContainerListView } from '$lib/types/views';
 
 	let search = $state('');
-	let containersList = $state<any[]>([]);
+	let containersList = $state<ContainerListView[]>([]);
 
 	if (browser) {
 		const containers = client.liveQuery.containers({

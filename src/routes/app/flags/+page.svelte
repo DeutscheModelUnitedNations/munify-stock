@@ -5,7 +5,9 @@
 	import { goto } from '$app/navigation';
 	import * as m from '$lib/paraglide/messages';
 
-	let flags = $state<any[]>([]);
+	import type { FlagListView } from '$lib/types/views';
+
+	let flags = $state<FlagListView[]>([]);
 	let search = $state('');
 	let showAddForm = $state(false);
 	let submitting = $state(false);

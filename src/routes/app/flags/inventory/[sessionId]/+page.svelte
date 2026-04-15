@@ -4,9 +4,15 @@
 	import { page } from '$app/state';
 	import * as m from '$lib/paraglide/messages';
 
-	let session = $state<any>(null);
-	let flags = $state<any[]>([]);
-	let checks = $state<any[]>([]);
+	import type {
+		FlagInventorySessionListView,
+		FlagSimpleView,
+		FlagCheckView
+	} from '$lib/types/views';
+
+	let session = $state<FlagInventorySessionListView | null>(null);
+	let flags = $state<FlagSimpleView[]>([]);
+	let checks = $state<FlagCheckView[]>([]);
 	let search = $state('');
 
 	const sessionId = page.params.sessionId!;

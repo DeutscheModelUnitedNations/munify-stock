@@ -4,7 +4,9 @@
 	import FormFieldset from '$lib/components/FormFieldset.svelte';
 	import * as m from '$lib/paraglide/messages';
 
-	let locations = $state<any[]>([]);
+	import type { LocationAdminView } from '$lib/types/views';
+
+	let locations = $state<LocationAdminView[]>([]);
 	let newName = $state('');
 	let newDescription = $state('');
 	let submitting = $state(false);
@@ -39,7 +41,7 @@
 		}
 	}
 
-	function startEdit(loc: any) {
+	function startEdit(loc: LocationAdminView) {
 		editingId = loc.id;
 		editName = loc.name;
 		editDescription = loc.description ?? '';
@@ -129,10 +131,14 @@
 								bind:value={editDescription}
 							/>
 						</div>
-						<button class="btn btn-ghost btn-xs" onclick={() => (editingId = null)}>
+						<button
+							class="btn btn-ghost btn-xs"
+							onclick={() => (editingId = null)}
+							aria-label={m.cancel()}
+						>
 							<i class="fa-solid fa-xmark"></i>
 						</button>
-						<button class="btn btn-xs btn-success" onclick={saveEdit}>
+						<button class="btn btn-xs btn-success" onclick={saveEdit} aria-label={m.save()}>
 							<i class="fa-solid fa-check"></i>
 						</button>
 					{:else}
@@ -146,10 +152,18 @@
 						<span class="badge badge-sm badge-info">
 							{m.containersAtLocation({ count: loc.containers?.length ?? 0 })}
 						</span>
-						<button class="btn btn-ghost btn-xs" onclick={() => startEdit(loc)}>
+						<button
+							class="btn btn-ghost btn-xs"
+							onclick={() => startEdit(loc)}
+							aria-label={m.edit()}
+						>
 							<i class="fa-solid fa-pen"></i>
 						</button>
-						<button class="btn text-error btn-ghost btn-xs" onclick={() => deleteLocation(loc.id)}>
+						<button
+							class="btn text-error btn-ghost btn-xs"
+							onclick={() => deleteLocation(loc.id)}
+							aria-label={m.delete()}
+						>
 							<i class="fa-solid fa-trash"></i>
 						</button>
 					{/if}

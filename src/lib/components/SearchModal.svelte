@@ -8,13 +8,15 @@
 
 	let open = $state(false);
 	let query = $state('');
-	let inputEl: HTMLInputElement;
+	let inputEl = $state<HTMLInputElement | null>(null);
 	let selectedIndex = $state(0);
 
+	import type { SearchItemView, SearchContainerView, SearchFlagView } from '$lib/types/views';
+
 	// Data sources
-	let items = $state<any[]>([]);
-	let containers = $state<any[]>([]);
-	let flags = $state<any[]>([]);
+	let items = $state<SearchItemView[]>([]);
+	let containers = $state<SearchContainerView[]>([]);
+	let flags = $state<SearchFlagView[]>([]);
 
 	if (browser) {
 		const iq = client.liveQuery.items({
@@ -169,9 +171,11 @@
 	></button>
 
 	<!-- Modal -->
+	<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 	<div
 		class="fixed top-[15%] right-4 left-4 z-50 mx-auto max-w-lg rounded-box bg-base-100 shadow-2xl"
 		role="dialog"
+		tabindex="0"
 		onkeydown={handleModalKeydown}
 	>
 		<div class="flex items-center gap-3 border-b border-base-300 px-4 py-3">

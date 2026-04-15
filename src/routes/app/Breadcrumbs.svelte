@@ -55,7 +55,7 @@
 
 {#if browser}
 	<div class="flex items-center gap-1">
-		<a class="btn !no-underline btn-ghost btn-sm" href="/app">
+		<a class="btn !no-underline btn-ghost btn-sm" href="/app" aria-label={m.home()}>
 			<i class="fa-duotone fa-home w-5 text-center"></i>
 		</a>
 		{#each breadcrumbs as crumb, i}

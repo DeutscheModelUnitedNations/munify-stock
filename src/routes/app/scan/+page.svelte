@@ -2,10 +2,11 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { onMount, onDestroy } from 'svelte';
+	import type { Html5Qrcode } from 'html5-qrcode';
 	import * as m from '$lib/paraglide/messages';
 
 	let scannerEl: HTMLDivElement;
-	let scanner: any = null;
+	let scanner: Html5Qrcode | null = null;
 	let lastResult = $state('');
 	let errorMsg = $state('');
 	let scanning = $state(false);
@@ -21,8 +22,7 @@
 				{ facingMode: 'environment' },
 				{
 					fps: 10,
-					qrbox: { width: 250, height: 250 },
-					formatsToSupport: undefined // undefined = all supported formats (QR, Code128, EAN, UPC, etc.)
+					qrbox: { width: 250, height: 250 }
 				},
 				(decodedText: string) => {
 					handleScan(decodedText);

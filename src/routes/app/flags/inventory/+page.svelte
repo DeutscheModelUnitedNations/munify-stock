@@ -4,7 +4,9 @@
 	import { goto } from '$app/navigation';
 	import * as m from '$lib/paraglide/messages';
 
-	let sessions = $state<any[]>([]);
+	import type { FlagInventorySessionListView } from '$lib/types/views';
+
+	let sessions = $state<FlagInventorySessionListView[]>([]);
 	let creating = $state(false);
 
 	if (browser) {

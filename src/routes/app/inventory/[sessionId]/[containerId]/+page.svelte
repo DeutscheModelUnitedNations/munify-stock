@@ -4,11 +4,18 @@
 	import { page } from '$app/state';
 	import * as m from '$lib/paraglide/messages';
 
-	let check = $state<any>(null);
-	let containerItems = $state<any[]>([]);
-	let checkItems = $state<any[]>([]);
-	let allContainers = $state<any[]>([]);
-	let allSessionCheckItems = $state<any[]>([]);
+	import type {
+		InventoryCheckDetailView,
+		InventoryContainerItemView,
+		InventoryCheckItemView,
+		LabelView
+	} from '$lib/types/views';
+
+	let check = $state<InventoryCheckDetailView | null>(null);
+	let containerItems = $state<InventoryContainerItemView[]>([]);
+	let checkItems = $state<InventoryCheckItemView[]>([]);
+	let allContainers = $state<LabelView[]>([]);
+	let allSessionCheckItems = $state<InventoryCheckItemView[]>([]);
 
 	const sessionId = page.params.sessionId!;
 	const containerId = page.params.containerId!;
@@ -52,7 +59,7 @@
 				// Filter to items belonging to our check
 				allSessionCheckItems = v;
 				if (check) {
-					checkItems = v.filter((ci) => ci.checkId === check.id);
+					checkItems = v.filter((ci) => ci.checkId === check!.id);
 				}
 			}
 		});
@@ -70,7 +77,7 @@
 	// Update checkItems when check changes
 	$effect(() => {
 		if (check && allSessionCheckItems.length > 0) {
-			checkItems = allSessionCheckItems.filter((ci) => ci.checkId === check.id);
+			checkItems = allSessionCheckItems.filter((ci) => ci.checkId === check!.id);
 		}
 	});
 
@@ -97,7 +104,7 @@
 			});
 		} else {
 			await client.mutate.checkInventoryItem({
-				__args: { checkId: check.id, itemId, found: true },
+				__args: { checkId: check!.id, itemId, found: true },
 				id: true
 			});
 		}

@@ -5,7 +5,9 @@
 	import QrCodeDisplay from '$lib/components/QrCodeDisplay.svelte';
 	import * as m from '$lib/paraglide/messages';
 
-	let container = $state<any>(null);
+	import type { ContainerDetailView } from '$lib/types/views';
+
+	let container = $state<ContainerDetailView | null>(null);
 
 	if (browser) {
 		const containerQuery = client.liveQuery.container({
@@ -103,7 +105,7 @@
 							label={container.label ?? 'Container'}
 						/>
 					{:else}
-						<div class="alert alert-warning text-sm">
+						<div class="alert text-sm alert-warning">
 							<i class="fa-solid fa-triangle-exclamation"></i>
 							<span>{m.noCustomIdWarning()}</span>
 						</div>
@@ -117,7 +119,7 @@
 						<i class="fa-duotone fa-cubes"></i>
 						{m.items()} ({container.items?.length ?? 0})
 					</h2>
-					{#if container.items?.length > 0}
+					{#if (container.items?.length ?? 0) > 0}
 						<ul class="flex flex-col gap-1">
 							{#each container.items as item}
 								<li>

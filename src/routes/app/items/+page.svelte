@@ -3,8 +3,10 @@
 	import { browser } from '$app/environment';
 	import * as m from '$lib/paraglide/messages';
 
+	import type { ItemListView } from '$lib/types/views';
+
 	let search = $state('');
-	let itemsList = $state<any[]>([]);
+	let itemsList = $state<ItemListView[]>([]);
 
 	if (browser) {
 		const items = client.liveQuery.items({

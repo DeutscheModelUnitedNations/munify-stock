@@ -4,9 +4,15 @@
 	import { page } from '$app/state';
 	import * as m from '$lib/paraglide/messages';
 
-	let session = $state<any>(null);
-	let checks = $state<any[]>([]);
-	let allContainers = $state<any[]>([]);
+	import type {
+		InventorySessionDetailView,
+		InventoryCheckListView,
+		InventoryContainerSimpleView
+	} from '$lib/types/views';
+
+	let session = $state<InventorySessionDetailView | null>(null);
+	let checks = $state<InventoryCheckListView[]>([]);
+	let allContainers = $state<InventoryContainerSimpleView[]>([]);
 	let addingContainer = $state(false);
 
 	const sessionId = page.params.sessionId!;
@@ -84,10 +90,10 @@
 		}
 	}
 
-	function checkProgress(check: any) {
+	function checkProgress(check: InventoryCheckListView) {
 		const items = check.items ?? [];
 		if (items.length === 0) return { found: 0, total: 0 };
-		const found = items.filter((i: any) => i.found).length;
+		const found = items.filter((i) => i.found).length;
 		return { found, total: items.length };
 	}
 </script>

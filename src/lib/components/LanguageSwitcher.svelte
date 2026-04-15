@@ -15,7 +15,7 @@
 	}
 </script>
 
-<button class="btn btn-ghost btn-sm" onclick={() => (modalOpen = true)}>
+<button class="btn btn-ghost btn-sm" onclick={() => (modalOpen = true)} aria-label={m.language()}>
 	<span class="fi fi-{localeInfo[getLocale()]?.flag} text-lg"></span>
 </button>
 

@@ -5,9 +5,11 @@
 	import QrCodeDisplay from '$lib/components/QrCodeDisplay.svelte';
 	import * as m from '$lib/paraglide/messages';
 
+	import type { ItemDetailView, ItemAuditLogView } from '$lib/types/views';
+
 	let activeTab = $state<'details' | 'history' | 'comments'>('details');
-	let item = $state<any>(null);
-	let auditLogs = $state<any[]>([]);
+	let item = $state<ItemDetailView | null>(null);
+	let auditLogs = $state<ItemAuditLogView[]>([]);
 
 	if (browser) {
 		const itemQuery = client.liveQuery.item({
