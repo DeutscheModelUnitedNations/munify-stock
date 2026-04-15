@@ -1,51 +1,95 @@
 # MUNify STOCK
-> STOCK stands for *System for Tracking and Organization of Containers and Kartons*
 
-MUNify STOCK is a software for easy inventory management custom tailored to the requirements of a Model United Nations conference. It is part of the MUNify project, a collection of software tools for Model United Nations conferences.
+> **S**ystem for **T**racking and **O**rganization of **C**ontainers and **K**artons
 
-Disclaimer: MUNify STOCK is currently in an early stage of development and not yet ready for production use. We are currently working on other parts of the MUNify project and will continue development of MUNify STOCK in the future.
-
-We are happy to recieve feedback, contributions and donations. Please see below for more information.
+MUNify STOCK is inventory management software for Model United Nations conferences, part of the [MUNify](https://github.com/DeutscheModelUnitedNations) ecosystem by [Deutsche Model United Nations (DMUN) e.V.](https://dmun.de)
 
 ## Features
-+ **Inventory Management**: Keep track of all your conference materials.
-+ **Flag Management**: Manage country desk flags.
+
+- **Inventory Management** — Track items, containers, and locations with full CRUD
+- **QR Code / Barcode Scanning** — Scan and generate QR codes for items and containers
+- **Flag Management** — Dedicated country flag inventory with checklist workflow
+- **General Inventory Sessions** — Container-based inventory with conflict detection
+- **Audit Trail** — Full change history per entity, browsable in the UI
+- **Global Search** — Fuzzy search across items, containers, and flags (Cmd+K)
+- **i18n** — German and English via Paraglide
+- **DMUN Corporate Identity** — Shared theme with light/dark mode
+
+## Tech Stack
+
+- **Frontend**: SvelteKit 2, Svelte 5 (runes), Tailwind CSS 4, DaisyUI 5
+- **Backend**: GraphQL via [rumble](https://github.com/m1212e/rumble) (Pothos + GraphQL Yoga)
+- **Database**: PostgreSQL via Drizzle ORM
+- **Auth**: OIDC via `@m1212e/sveltekit-oidc`
+- **GraphQL Client**: rumble's built-in client generator (URQL-based)
 
 ## Develop Locally
-Coming soon. Please check back later.
+
+### Prerequisites
+
+- [Bun](https://bun.sh) (package manager & runtime)
+- [Docker](https://www.docker.com/) (for PostgreSQL & mock OIDC server)
+
+### Setup
+
+```bash
+# Install dependencies
+bun install
+
+# Start PostgreSQL + mock OIDC server, then dev server
+bun run dev
+
+# Push database schema
+bun run db:push
+
+# Generate the GraphQL client (dev server must be running)
+bun run generate:client
+```
+
+The app will be available at `http://localhost:5173`. The mock OIDC login page has preset "admin" and "member" users.
+
+### Scripts
+
+| Command | Description |
+|---------|-------------|
+| `bun run dev` | Start Docker + dev server |
+| `bun run dev:server` | Dev server only (no Docker) |
+| `bun run build` | Production build |
+| `bun run check` | Svelte + TypeScript type checking |
+| `bun run lint` | Prettier + ESLint check |
+| `bun run format` | Auto-format all files |
+| `bun run generate:client` | Generate typed GraphQL client (requires running dev server) |
+| `bun run db:push` | Push Drizzle schema to database |
+| `bun run db:migrate` | Run Drizzle migrations |
+| `bun run db:studio` | Open Drizzle Studio (DB GUI) |
+
+### Environment Variables
+
+See `.env.example` for all required variables. Key ones:
+
+| Variable | Description |
+|----------|-------------|
+| `DATABASE_URL` | PostgreSQL connection string |
+| `PUBLIC_OIDC_AUTHORITY` | OIDC discovery URL |
+| `PUBLIC_OIDC_CLIENT_ID` | OAuth2 client ID |
+| `OIDC_SCOPES` | OIDC scopes (default includes profile, email) |
+| `OIDC_ROLE_CLAIM` | JWT claim name for roles |
+| `ADMIN_DOMAIN_WHITELIST` | Comma-separated email domains for admin access |
 
 ## FAQ
+
 **Can I use this for my conference outside of DMUN?**
-Yes. We encourage and allow usage for other conferences. Please see our license for more detailed information on this.
 
-Note that the project is still under development and it is not recommended to use it without our consultation for a conference at the moment. The current state of the of the App is tested on a few DMUN conferences. If you are interested in using it, please contact us via the discussion section of this repository. We are happy to help you with the setup and usage, as long as you use it for your own conferences in line with our non-profit spirit.
-
-Note also that this is primarily a project for DMUN conferences and might not be 100% suitable for your conferences needs and compatable with your rules of procedure. If you want guidlines on how to adapt the Code to your needs, please contact us via the discussion section of this repository. We are also happy to help.
-
-**Ok, but how?**
-You would need to deploy the app yourself, on your own servers and do all the neccessary setups. This can be an owerwhelming task so feel free to contact us when you need help. In some cases it might be possible for us to run the infrastructure and grant you access, please contact us in case you would like to know more about this. Depending on the use case and complexity, we might need to charge a service fee.
-
-**Can I help you building the project?**
-Yes, you can! Please refer to the contributing section below.
-
-**Can you add a feature?**
-For feature suggestions, please post in the discussion section of this repository. You can find it here. If you want to write it yourself, please see the contributing section below.
+Yes. We encourage and allow usage for other conferences. Please see our license for more detailed information. Note that the project is still under development. If you are interested in using it, please contact us via the discussion section of this repository.
 
 ## Contributing
-Contributions are always welcome!
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for ways to get started.
-
-By contributing you agree to release your contribution under the projects license.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on commits, branches, and pull requests.
 
 ## License
 
-This aspect is work in progress since the project is currently in its development phase. If you want to use the project or one of its components nonetheless, please contact us via the discussion section.
+This aspect is work in progress since the project is currently in its development phase. See [LICENSE](LICENSE).
 
-[LICENSE.md](LICENSE.md)
+## Support / Donations
 
-## Support us / Donations
-You can support our work by donating to our non-profit organization [Deutsche Model United Nations (DMUN) e.V.](https://dmun.de).
-Please contact our board for details on how to donate by sending an email to [vorstand@dmun.de](mailto:vorstand@dmun.de).
-
-All donations are tax deductible in Germany and we are happy to provide you with a donation receipt. The money will be used to support our development of MUNify if you don't specify a different purpose.
+You can support our work by donating to [DMUN e.V.](https://dmun.de). Contact [vorstand@dmun.de](mailto:vorstand@dmun.de) for details.

@@ -1,89 +1,89 @@
 {
-  "files.eol": "\n",
-  "vscodeGitCommit.template": [
-    "{prefix} ({scope}): {message}",
-    "branch: {branch}"
-  ],
-  "[javascript]": {},
-  "editor.codeActionsOnSave": {},
-  "vscodeGitCommit.variables": {
-    "prefix": [
-      {
-        "label": "✨ feat",
-        "detail": "A new feature"
-      },
-      {
-        "label": "⬆️ improvement",
-        "detail": "An improvement of an existing feature"
-      },
-      {
-        "label": "🐞 fix",
-        "detail": "A bugfix"
-      },
-      {
-        "label": "🎨 style",
-        "detail": "Stylistic changes to the App"
-      },
-      {
-        "label": "🗺️ i18n",
-        "detail": "Make changes to the Internationalization files"
-      },
-      {
-        "label": "🚧 wip",
-        "detail": "Work in progress"
-      },
-      {
-        "label": "🧼 format & lint",
-        "detail": "Formatting and linting changes"
-      },
-      {
-        "label": "🔤 typing",
-        "detail": "Changes to fulfill typing requirements"
-      },
-      {
-        "label": "📚 docs",
-        "detail": "A documentation update"
-      },
-      {
-        "label": "🚀 perf",
-        "detail": "A code change that improves performance"
-      },
-      {
-        "label": "🧪 test",
-        "detail": "A test update"
-      },
-      {
-        "label": "🧹 chore",
-        "detail": "Project housekeeping"
-      },
-      {
-        "label": "♻️ refactor",
-        "detail": "Refactor of the code without change in functionality"
-      },
-      {
-        "label": "🏗️ build",
-        "detail": "Changes that affect the build system or external dependencies"
-      },
-      {
-        "label": "🚦 ci",
-        "detail": "Changes to CI configuration files and scripts"
-      },
-      {
-        "label": "↩️ revert",
-        "detail": "Reverts a previous commit"
-      },
-      {
-        "label": "🔀 merge",
-        "detail": "Use when merging branches"
-      }
-    ]
-  },
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "editor.tabSize": 2,
-  "vscodemacros.userMacroCommands": [
-    {
-      "path": "/workspaces/munify/.vscode/macros.ts",
-      "name": "OpenI18n"
-    }
-  ]
+	"files.eol": "\n",
+	"vscodeGitCommit.template": ["{prefix} ({scope}): {message}", "branch: {branch}"],
+	"[javascript]": {},
+	"editor.codeActionsOnSave": {},
+	"vscodeGitCommit.variables": {
+		"prefix": [
+			{
+				"label": "✨ feat",
+				"detail": "A new feature"
+			},
+			{
+				"label": "⬆️ improvement",
+				"detail": "An improvement of an existing feature"
+			},
+			{
+				"label": "🐞 fix",
+				"detail": "A bugfix"
+			},
+			{
+				"label": "🎨 style",
+				"detail": "Stylistic changes to the App"
+			},
+			{
+				"label": "🗺️ i18n",
+				"detail": "Make changes to the Internationalization files"
+			},
+			{
+				"label": "🚧 wip",
+				"detail": "Work in progress"
+			},
+			{
+				"label": "🧼 format & lint",
+				"detail": "Formatting and linting changes"
+			},
+			{
+				"label": "🔤 typing",
+				"detail": "Changes to fulfill typing requirements"
+			},
+			{
+				"label": "📚 docs",
+				"detail": "A documentation update"
+			},
+			{
+				"label": "🚀 perf",
+				"detail": "A code change that improves performance"
+			},
+			{
+				"label": "🧪 test",
+				"detail": "A test update"
+			},
+			{
+				"label": "🧹 chore",
+				"detail": "Project housekeeping"
+			},
+			{
+				"label": "♻️ refactor",
+				"detail": "Refactor of the code without change in functionality"
+			},
+			{
+				"label": "🏗️ build",
+				"detail": "Changes that affect the build system or external dependencies"
+			},
+			{
+				"label": "🚦 ci",
+				"detail": "Changes to CI configuration files and scripts"
+			},
+			{
+				"label": "↩️ revert",
+				"detail": "Reverts a previous commit"
+			},
+			{
+				"label": "🔀 merge",
+				"detail": "Use when merging branches"
+			}
+		]
+	},
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"editor.tabSize": 2,
+	"vscodemacros.userMacroCommands": [
+		{
+			"path": "/workspaces/munify/.vscode/macros.ts",
+			"name": "OpenI18n"
+		}
+	],
+	"files.associations": {
+		"*.css": "tailwindcss"
+	}
 }

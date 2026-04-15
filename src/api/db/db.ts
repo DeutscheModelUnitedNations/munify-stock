@@ -1,0 +1,13 @@
+import { drizzle } from 'drizzle-orm/node-postgres';
+import * as schemaInternal from './schema';
+import { relations as relationsInternal } from './relations';
+import { configPrivate } from '$config/private';
+
+export const db = drizzle(configPrivate.DATABASE_URL, {
+	schema: schemaInternal,
+	relations: relationsInternal,
+	casing: 'snake_case'
+});
+
+export const schema = schemaInternal;
+export const relations = relationsInternal;
