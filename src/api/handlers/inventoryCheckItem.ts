@@ -28,7 +28,7 @@ schemaBuilder.mutationFields((t) => ({
 		resolve: async (query, _root, args, ctx) => {
 			ctx.mustBeLoggedIn();
 
-			const [created] = await db.insert(schema.inventoryCheckItem).values(args).returning();
+			const [_created] = await db.insert(schema.inventoryCheckItem).values(args).returning();
 			pubsub.created();
 			const result = await db.query.inventoryCheckItem.findFirst(
 				query(ctx.abilities.inventoryCheckItem.filter('read').query.single)

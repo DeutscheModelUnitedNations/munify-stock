@@ -25,7 +25,7 @@ schemaBuilder.mutationFields((t) => ({
 		resolve: async (query, _root, args, ctx) => {
 			const user = ctx.mustBeLoggedIn();
 
-			const [created] = await db
+			const [_created] = await db
 				.insert(schema.inventoryCheck)
 				.values({ ...args, checkedBy: user.sub, startedAt: new Date(), status: 'IN_PROGRESS' })
 				.returning();

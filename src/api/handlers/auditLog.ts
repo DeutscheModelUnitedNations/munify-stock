@@ -1,5 +1,4 @@
 import { abilityBuilder } from '$api/rumble';
-import { isGlobalAdmin } from '$api/services/isAdminEmail';
 import { basics } from './basics';
 
 const { ref } = basics('auditLog');

@@ -24,7 +24,7 @@ schemaBuilder.mutationFields((t) => ({
 		},
 		resolve: async (query, _root, args, ctx) => {
 			const user = ctx.mustBeLoggedIn();
-			const [created] = await db
+			const [_created] = await db
 				.insert(schema.comment)
 				.values({ ...args, createdBy: user.sub })
 				.returning();

@@ -171,7 +171,6 @@
 	></button>
 
 	<!-- Modal -->
-	<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 	<div
 		class="fixed top-[15%] right-4 left-4 z-50 mx-auto max-w-lg rounded-box bg-base-100 shadow-2xl"
 		role="dialog"

@@ -29,7 +29,7 @@
 				},
 				() => {}
 			);
-		} catch (err) {
+		} catch {
 			errorMsg = m.cameraError();
 			scanning = false;
 		}
