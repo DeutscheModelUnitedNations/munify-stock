@@ -25,7 +25,8 @@
 		e.preventDefault();
 		submitting = true;
 		const form = new FormData(e.target as HTMLFormElement);
-		const number = (form.get('number') as string) || undefined;
+		const customId = (form.get('customId') as string) || undefined;
+		const label = (form.get('label') as string) || undefined;
 		const typeId = (form.get('typeId') as string) || undefined;
 		const description = (form.get('description') as string) || undefined;
 		const locationId = (form.get('locationId') as string) || undefined;
@@ -33,7 +34,7 @@
 
 		try {
 			const result = await client.mutate.createContainer({
-				__args: { number, typeId, description, locationId, locationDetail },
+				__args: { customId, label, typeId, description, locationId, locationDetail },
 				id: true
 			});
 			if (result?.id) {
@@ -53,12 +54,24 @@
 	<form onsubmit={handleSubmit} class="flex flex-col gap-4">
 		<FormFieldset title={m.general()}>
 			<fieldset class="fieldset">
-				<legend class="fieldset-legend">{m.containerNumber()}</legend>
+				<legend class="fieldset-legend">{m.customId()}</legend>
 				<input
-					name="number"
+					name="customId"
 					type="text"
 					class="input w-full"
-					placeholder={m.containerNumberPlaceholder()}
+					pattern="^[a-zA-Z0-9\-._]+$"
+					placeholder={m.customIdPlaceholder()}
+				/>
+				<p class="mt-1 text-xs text-base-content/50">{m.customIdHint()}</p>
+			</fieldset>
+
+			<fieldset class="fieldset">
+				<legend class="fieldset-legend">{m.containerLabel()}</legend>
+				<input
+					name="label"
+					type="text"
+					class="input w-full"
+					placeholder={m.containerLabelPlaceholder()}
 				/>
 			</fieldset>
 

@@ -13,6 +13,7 @@
 		const itemQuery = client.liveQuery.item({
 			__args: { id: page.params.itemId! },
 			id: true,
+			customId: true,
 			name: true,
 			description: true,
 			quantity: true,
@@ -27,11 +28,11 @@
 			updatedAt: true,
 			type: { id: true, name: true },
 			containerId: true,
-		container: { id: true, number: true, description: true, location: { id: true, name: true } },
-		locationId: true,
-		location: { id: true, name: true },
-		isTemporarilyMoved: true,
-		temporaryLocation: true,
+			container: { id: true, label: true, description: true, location: { id: true, name: true } },
+			locationId: true,
+			location: { id: true, name: true },
+			isTemporarilyMoved: true,
+			temporaryLocation: true,
 			aliases: { id: true, alias: true },
 			comments: {
 				id: true,
@@ -139,6 +140,10 @@
 								<span>{item.value != null ? `${(item.value / 100).toFixed(2)} EUR` : '--'}</span>
 							</div>
 							<div class="flex justify-between">
+								<span class="opacity-70">{m.customId()}</span>
+								<span>{item.customId ?? '--'}</span>
+							</div>
+							<div class="flex justify-between">
 								<span class="opacity-70">{m.itemQrCode()}</span>
 								<span>{item.qrCode ?? '--'}</span>
 							</div>
@@ -163,7 +168,7 @@
 								{/if}
 								<a href="/app/containers/{item.container.id}" class="link link-primary">
 									<i class="fa-solid fa-box mr-1"></i>
-									{item.container.number ?? 'Unnamed'}{item.container.description
+									{item.container.label ?? 'Unnamed'}{item.container.description
 										? ` - ${item.container.description}`
 										: ''}
 								</a>
@@ -185,7 +190,14 @@
 							<i class="fa-duotone fa-qrcode"></i>
 							{m.qrCode()}
 						</h2>
-						<QrCodeDisplay value={item.qrCode ?? `STOCK:item:${item.id}`} label={item.name} />
+						{#if item.customId}
+							<QrCodeDisplay value={`STOCK:item:${item.customId}`} label={item.name} />
+						{:else}
+							<div class="alert alert-warning text-sm">
+								<i class="fa-solid fa-triangle-exclamation"></i>
+								<span>{m.noCustomIdWarning()}</span>
+							</div>
+						{/if}
 					</div>
 				</div>
 

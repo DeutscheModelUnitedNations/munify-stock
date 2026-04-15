@@ -19,6 +19,7 @@
 	if (browser) {
 		const iq = client.liveQuery.items({
 			id: true,
+			customId: true,
 			name: true,
 			qrCode: true,
 			type: { name: true },
@@ -30,7 +31,8 @@
 
 		const cq = client.liveQuery.containers({
 			id: true,
-			number: true,
+			customId: true,
+			label: true,
 			description: true
 		});
 		cq.subscribe((v) => {
@@ -63,7 +65,12 @@
 				type: 'item',
 				id: item.id,
 				title: item.name,
-				subtitle: [item.type?.name, item.qrCode, ...(item.aliases?.map((a: any) => a.alias) ?? [])]
+				subtitle: [
+					item.customId,
+					item.type?.name,
+					item.qrCode,
+					...(item.aliases?.map((a: any) => a.alias) ?? [])
+				]
 					.filter(Boolean)
 					.join(' · '),
 				icon: 'fa-cube',
@@ -74,8 +81,8 @@
 			entries.push({
 				type: 'container',
 				id: c.id,
-				title: c.number ?? 'Unnamed',
-				subtitle: c.description ?? '',
+				title: c.label ?? 'Unnamed',
+				subtitle: [c.customId, c.description].filter(Boolean).join(' · '),
 				icon: 'fa-box',
 				href: `/app/containers/${c.id}`
 			});

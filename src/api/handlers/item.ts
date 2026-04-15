@@ -2,6 +2,7 @@ import { db, schema } from '$api/db/db';
 import { abilityBuilder, schemaBuilder } from '$api/rumble';
 import { isGlobalAdmin } from '$api/services/isAdminEmail';
 import { logChange } from '$api/services/auditLog';
+import { resolveCustomId } from '$api/services/customId';
 import { eq } from 'drizzle-orm';
 import { basics, stripNulls } from './basics';
 
@@ -23,6 +24,7 @@ schemaBuilder.mutationFields((t) => ({
 		type: ref,
 		args: {
 			name: t.arg.string({ required: true }),
+			customId: t.arg.string(),
 			typeId: t.arg.id(),
 			description: t.arg.string(),
 			photo: t.arg.string(),
@@ -45,9 +47,11 @@ schemaBuilder.mutationFields((t) => ({
 				throw new Error('An item cannot have both a container and a direct location');
 			}
 
+			const customId = await resolveCustomId(schema.item, args.customId);
+
 			const [created] = await db
 				.insert(schema.item)
-				.values({ ...stripNulls(args), createdBy: user.sub })
+				.values({ ...stripNulls(args), customId, createdBy: user.sub })
 				.returning();
 			await logChange({
 				tableName: 'item',
@@ -67,6 +71,7 @@ schemaBuilder.mutationFields((t) => ({
 		args: {
 			id: t.arg.id({ required: true }),
 			name: t.arg.string(),
+			customId: t.arg.string(),
 			typeId: t.arg.id(),
 			description: t.arg.string(),
 			photo: t.arg.string(),
@@ -126,6 +131,22 @@ schemaBuilder.mutationFields((t) => ({
 			});
 			pubsub.removed();
 			return true;
+		}
+	})
+}));
+
+schemaBuilder.queryFields((t) => ({
+	itemByCustomId: t.field({
+		type: 'String',
+		nullable: true,
+		args: { customId: t.arg.string({ required: true }) },
+		resolve: async (_root, args) => {
+			const [result] = await db
+				.select({ id: schema.item.id })
+				.from(schema.item)
+				.where(eq(schema.item.customId, args.customId))
+				.limit(1);
+			return result?.id ?? null;
 		}
 	})
 }));

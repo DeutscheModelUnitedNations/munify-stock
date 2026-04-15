@@ -30,7 +30,7 @@
 			status: true,
 			startedAt: true,
 			completedAt: true,
-			container: { id: true, number: true, description: true },
+			container: { id: true, label: true, description: true },
 			items: { id: true, found: true }
 		});
 		checksQuery.subscribe((v) => {
@@ -39,7 +39,7 @@
 
 		const containersQuery = client.liveQuery.containers({
 			id: true,
-			number: true,
+			label: true,
 			description: true,
 			items: { id: true }
 		});
@@ -156,7 +156,7 @@
 								<i class="fa-duotone fa-box text-xl text-primary"></i>
 								<div>
 									<p class="font-medium">
-										{check.container?.number ?? 'Unnamed'}
+										{check.container?.label ?? 'Unnamed'}
 										{#if check.container?.description}
 											<span class="text-sm opacity-50">
 												— {check.container.description}
@@ -206,7 +206,7 @@
 									disabled={addingContainer}
 								>
 									<i class="fa-duotone fa-box"></i>
-									{container.number ?? 'Unnamed'}
+									{container.label ?? 'Unnamed'}
 									<span class="ml-auto badge badge-xs badge-info">
 										{m.itemsInContainer({ count: container.items?.length ?? 0 })}
 									</span>

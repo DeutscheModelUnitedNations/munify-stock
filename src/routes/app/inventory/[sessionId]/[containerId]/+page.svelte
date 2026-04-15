@@ -19,7 +19,7 @@
 			__args: { where: { sessionId, containerId } },
 			id: true,
 			status: true,
-			container: { id: true, number: true, description: true }
+			container: { id: true, label: true, description: true }
 		});
 		checksQuery.subscribe((v) => {
 			if (v && v.length > 0) check = v[0];
@@ -60,7 +60,7 @@
 		// All containers for "move to" dropdown
 		const containersQuery = client.liveQuery.containers({
 			id: true,
-			number: true
+			label: true
 		});
 		containersQuery.subscribe((v) => {
 			if (v) allContainers = v;
@@ -136,7 +136,7 @@
 				<div>
 					<h1 class="text-2xl font-bold">
 						<i class="fa-duotone fa-box mr-2 text-primary"></i>
-						{check.container?.number ?? 'Container'}
+						{check.container?.label ?? 'Container'}
 					</h1>
 					{#if check.container?.description}
 						<p class="text-xs opacity-50">{check.container.description}</p>
@@ -216,7 +216,7 @@
 									{@const target = allContainers.find((c) => c.id === ci.movedToContainerId)}
 									<span class="text-info">
 										<i class="fa-solid fa-arrow-right"></i>
-										{m.movedTo({ target: target?.number ?? m.containers() })}
+										{m.movedTo({ target: target?.label ?? m.containers() })}
 									</span>
 								{/if}
 							</div>
@@ -233,7 +233,7 @@
 							>
 								<option value="">{m.moveTo()}</option>
 								{#each allContainers.filter((c) => c.id !== containerId) as c}
-									<option value={c.id}>{c.number ?? 'Unnamed'}</option>
+									<option value={c.id}>{c.label ?? 'Unnamed'}</option>
 								{/each}
 							</select>
 						{/if}

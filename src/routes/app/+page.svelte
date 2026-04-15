@@ -23,7 +23,7 @@
 
 		const containers = client.liveQuery.containers({
 			id: true,
-			number: true,
+			label: true,
 			isTemporarilyMoved: true,
 			temporaryLocation: true
 		});
@@ -150,10 +150,7 @@
 					{#each locationsList as loc}
 						{@const containerCount = loc.containers?.length ?? 0}
 						{@const itemsInContainersCount =
-							loc.containers?.reduce(
-								(sum: number, c: any) => sum + (c.items?.length ?? 0),
-								0
-							) ?? 0}
+							loc.containers?.reduce((sum: number, c: any) => sum + (c.items?.length ?? 0), 0) ?? 0}
 						{@const soloItemCount = loc.directItems?.length ?? 0}
 						<a
 							href="/app/admin/locations"
@@ -205,7 +202,7 @@
 							class="flex items-center gap-2 rounded-lg p-2 text-sm hover:bg-base-200"
 						>
 							<i class="fa-solid fa-box text-secondary"></i>
-							<span class="flex-1 font-medium">{container.number ?? 'Unnamed'}</span>
+							<span class="flex-1 font-medium">{container.label ?? 'Unnamed'}</span>
 							<span class="text-xs opacity-60">{container.temporaryLocation}</span>
 						</a>
 					{/each}

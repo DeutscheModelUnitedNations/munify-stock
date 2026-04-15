@@ -17,7 +17,7 @@
 			countryName: true,
 			quantity: true,
 			notes: true,
-			container: { id: true, number: true }
+			container: { id: true, label: true }
 		});
 		flagsQuery.subscribe((v) => {
 			if (v) flags = v;
@@ -133,7 +133,7 @@
 					<div class="flex gap-1">
 						<span class="badge badge-sm badge-info">x{flag.quantity}</span>
 						{#if flag.container}
-							<span class="badge badge-outline badge-sm">{flag.container.number ?? 'Box'}</span>
+							<span class="badge badge-outline badge-sm">{flag.container.label ?? 'Box'}</span>
 						{/if}
 					</div>
 				</div>

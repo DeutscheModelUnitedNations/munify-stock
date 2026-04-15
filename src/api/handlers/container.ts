@@ -2,6 +2,7 @@ import { db, schema } from '$api/db/db';
 import { abilityBuilder, schemaBuilder } from '$api/rumble';
 import { isGlobalAdmin } from '$api/services/isAdminEmail';
 import { logChange } from '$api/services/auditLog';
+import { resolveCustomId } from '$api/services/customId';
 import { eq } from 'drizzle-orm';
 import { basics, stripNulls } from './basics';
 
@@ -22,8 +23,9 @@ schemaBuilder.mutationFields((t) => ({
 	createContainer: t.drizzleField({
 		type: ref,
 		args: {
+			customId: t.arg.string(),
 			typeId: t.arg.id(),
-			number: t.arg.string(),
+			label: t.arg.string(),
 			description: t.arg.string(),
 			locationId: t.arg.id(),
 			locationDetail: t.arg.string(),
@@ -34,9 +36,11 @@ schemaBuilder.mutationFields((t) => ({
 		resolve: async (query, _root, args, ctx) => {
 			const user = ctx.mustBeLoggedIn();
 
+			const customId = await resolveCustomId(schema.container, args.customId);
+
 			const [created] = await db
 				.insert(schema.container)
-				.values({ ...stripNulls(args), createdBy: user.sub })
+				.values({ ...stripNulls(args), customId, createdBy: user.sub })
 				.returning();
 			await logChange({
 				tableName: 'container',
@@ -55,8 +59,9 @@ schemaBuilder.mutationFields((t) => ({
 		type: ref,
 		args: {
 			id: t.arg.id({ required: true }),
+			customId: t.arg.string(),
 			typeId: t.arg.id(),
-			number: t.arg.string(),
+			label: t.arg.string(),
 			description: t.arg.string(),
 			locationId: t.arg.id(),
 			locationDetail: t.arg.string(),
@@ -95,6 +100,22 @@ schemaBuilder.mutationFields((t) => ({
 			});
 			pubsub.removed();
 			return true;
+		}
+	})
+}));
+
+schemaBuilder.queryFields((t) => ({
+	containerByCustomId: t.field({
+		type: 'String',
+		nullable: true,
+		args: { customId: t.arg.string({ required: true }) },
+		resolve: async (_root, args) => {
+			const [result] = await db
+				.select({ id: schema.container.id })
+				.from(schema.container)
+				.where(eq(schema.container.customId, args.customId))
+				.limit(1);
+			return result?.id ?? null;
 		}
 	})
 }));

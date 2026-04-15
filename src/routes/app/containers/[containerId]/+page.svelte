@@ -11,7 +11,8 @@
 		const containerQuery = client.liveQuery.container({
 			__args: { id: page.params.containerId! },
 			id: true,
-			number: true,
+			customId: true,
+			label: true,
 			description: true,
 			qrCode: true,
 			locationDetail: true,
@@ -49,7 +50,7 @@
 			</a>
 			<h1 class="text-2xl font-bold">
 				<i class="fa-duotone fa-box mr-2 text-primary"></i>
-				{container.number ?? 'Unnamed Container'}
+				{container.label ?? 'Unnamed Container'}
 			</h1>
 		</div>
 
@@ -74,6 +75,10 @@
 							<span>{container.locationDetail ?? '--'}</span>
 						</div>
 						<div class="flex justify-between">
+							<span class="opacity-70">{m.customId()}</span>
+							<span>{container.customId ?? '--'}</span>
+						</div>
+						<div class="flex justify-between">
 							<span class="opacity-70">{m.qrCode()}</span>
 							<span>{container.qrCode ?? '--'}</span>
 						</div>
@@ -92,10 +97,17 @@
 						<i class="fa-duotone fa-qrcode"></i>
 						{m.qrCode()}
 					</h2>
-					<QrCodeDisplay
-						value={container.qrCode ?? `STOCK:container:${container.id}`}
-						label={container.number ?? 'Container'}
-					/>
+					{#if container.customId}
+						<QrCodeDisplay
+							value={`STOCK:container:${container.customId}`}
+							label={container.label ?? 'Container'}
+						/>
+					{:else}
+						<div class="alert alert-warning text-sm">
+							<i class="fa-solid fa-triangle-exclamation"></i>
+							<span>{m.noCustomIdWarning()}</span>
+						</div>
+					{/if}
 				</div>
 			</div>
 

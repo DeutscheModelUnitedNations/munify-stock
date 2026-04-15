@@ -9,13 +9,14 @@
 	if (browser) {
 		const items = client.liveQuery.items({
 			id: true,
+			customId: true,
 			name: true,
 			quantity: true,
 			warningFlag: true,
 			warningFlagNote: true,
 			qrCode: true,
 			type: { name: true },
-			container: { id: true, number: true }
+			container: { id: true, label: true }
 		});
 		items.subscribe((v) => {
 			if (v) itemsList = v;
@@ -23,7 +24,12 @@
 	}
 
 	const filtered = $derived(
-		itemsList.filter((item) => !search || item.name.toLowerCase().includes(search.toLowerCase()))
+		itemsList.filter(
+			(item) =>
+				!search ||
+				item.name.toLowerCase().includes(search.toLowerCase()) ||
+				(item.customId ?? '').toLowerCase().includes(search.toLowerCase())
+		)
 	);
 </script>
 
@@ -49,6 +55,7 @@
 		<table class="table">
 			<thead>
 				<tr>
+					<th>{m.customId()}</th>
 					<th>{m.itemName()}</th>
 					<th>{m.itemType()}</th>
 					<th>{m.itemQuantity()}</th>
@@ -59,6 +66,7 @@
 			<tbody>
 				{#each filtered as item}
 					<tr class="hover:bg-base-200">
+						<td class="font-mono text-xs opacity-70">{item.customId ?? '--'}</td>
 						<td>
 							<a href="/app/items/{item.id}" class="link font-medium link-hover">
 								{item.name}
@@ -75,7 +83,7 @@
 						<td>
 							{#if item.container}
 								<a href="/app/containers/{item.container.id}" class="link link-hover">
-									{item.container.number ?? 'Container'}
+									{item.container.label ?? 'Container'}
 								</a>
 							{:else}
 								<span class="opacity-40">--</span>
@@ -97,7 +105,7 @@
 					</tr>
 				{:else}
 					<tr>
-						<td colspan="5" class="text-center opacity-50">
+						<td colspan="6" class="text-center opacity-50">
 							{#if search}
 								{m.noItemsMatching({ query: search })}
 							{:else}

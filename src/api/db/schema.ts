@@ -1,5 +1,14 @@
 import { nanoid } from '../../lib/helpers/nanoid';
-import { pgTable, text, timestamp, pgEnum, boolean, integer, serial, check } from 'drizzle-orm/pg-core';
+import {
+	pgTable,
+	text,
+	timestamp,
+	pgEnum,
+	boolean,
+	integer,
+	serial,
+	check
+} from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 
 const defaultTimestamps = {
@@ -66,8 +75,9 @@ export const containerType = pgTable('container_type', {
 
 export const container = pgTable('container', {
 	...defaultIdAndTimestamps,
+	customId: text().unique(),
 	typeId: text().references(() => containerType.id),
-	number: text(),
+	label: text(),
 	description: text(),
 	locationId: text().references(() => location.id),
 	locationDetail: text(),
@@ -81,6 +91,7 @@ export const item = pgTable(
 	'item',
 	{
 		...defaultIdAndTimestamps,
+		customId: text().unique(),
 		name: text().notNull(),
 		typeId: text().references(() => itemType.id),
 		description: text(),

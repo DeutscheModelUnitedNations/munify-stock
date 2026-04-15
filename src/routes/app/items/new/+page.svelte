@@ -20,7 +20,7 @@
 
 		const containersQuery = client.liveQuery.containers({
 			id: true,
-			number: true,
+			label: true,
 			description: true
 		});
 		containersQuery.subscribe((v) => {
@@ -38,19 +38,16 @@
 		submitting = true;
 		const form = new FormData(e.target as HTMLFormElement);
 		const name = form.get('name') as string;
+		const customId = (form.get('customId') as string) || undefined;
 		const typeId = (form.get('typeId') as string) || undefined;
 		const description = (form.get('description') as string) || undefined;
 		const quantity = form.get('quantity') ? Number(form.get('quantity')) : undefined;
 		const serialNumber = (form.get('serialNumber') as string) || undefined;
 
 		const containerId =
-			placementMode === 'container'
-				? (form.get('containerId') as string) || undefined
-				: undefined;
+			placementMode === 'container' ? (form.get('containerId') as string) || undefined : undefined;
 		const locationId =
-			placementMode === 'location'
-				? (form.get('locationId') as string) || undefined
-				: undefined;
+			placementMode === 'location' ? (form.get('locationId') as string) || undefined : undefined;
 
 		const temporaryLocation = isTemporarilyMoved
 			? (form.get('temporaryLocation') as string) || undefined
@@ -60,6 +57,7 @@
 			const result = await client.mutate.createItem({
 				__args: {
 					name,
+					customId,
 					typeId,
 					description,
 					containerId,
@@ -109,6 +107,18 @@
 		</FormFieldset>
 
 		<FormFieldset title={m.details()}>
+			<fieldset class="fieldset">
+				<legend class="fieldset-legend">{m.customId()}</legend>
+				<input
+					name="customId"
+					type="text"
+					class="input w-full"
+					pattern="^[a-zA-Z0-9\-._]+$"
+					placeholder={m.customIdPlaceholder()}
+				/>
+				<p class="mt-1 text-xs text-base-content/50">{m.customIdHint()}</p>
+			</fieldset>
+
 			<fieldset class="fieldset">
 				<legend class="fieldset-legend">{m.itemQuantity()}</legend>
 				<input
@@ -161,7 +171,7 @@
 						<option value="">{m.itemNoContainer()}</option>
 						{#each containers as container}
 							<option value={container.id}>
-								{container.number ?? 'Unnamed'}{container.description
+								{container.label ?? 'Unnamed'}{container.description
 									? ` - ${container.description}`
 									: ''}
 							</option>
@@ -182,11 +192,7 @@
 
 			<fieldset class="fieldset">
 				<label class="label cursor-pointer justify-start gap-2">
-					<input
-						type="checkbox"
-						class="checkbox"
-						bind:checked={isTemporarilyMoved}
-					/>
+					<input type="checkbox" class="checkbox" bind:checked={isTemporarilyMoved} />
 					<span>{m.temporarilyMoved()}</span>
 				</label>
 			</fieldset>

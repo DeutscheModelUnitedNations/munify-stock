@@ -9,7 +9,8 @@
 	if (browser) {
 		const containers = client.liveQuery.containers({
 			id: true,
-			number: true,
+			customId: true,
+			label: true,
 			description: true,
 			qrCode: true,
 			locationDetail: true,
@@ -26,7 +27,8 @@
 		containersList.filter(
 			(c) =>
 				!search ||
-				(c.number ?? '').toLowerCase().includes(search.toLowerCase()) ||
+				(c.label ?? '').toLowerCase().includes(search.toLowerCase()) ||
+				(c.customId ?? '').toLowerCase().includes(search.toLowerCase()) ||
 				(c.description ?? '').toLowerCase().includes(search.toLowerCase())
 		)
 	);
@@ -59,7 +61,7 @@
 				<div class="card-body">
 					<h2 class="card-title">
 						<i class="fa-duotone fa-box text-primary"></i>
-						{container.number ?? 'Unnamed'}
+						{container.label ?? 'Unnamed'}
 					</h2>
 					{#if container.description}
 						<p class="text-sm opacity-70">{container.description}</p>

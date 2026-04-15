@@ -41,7 +41,7 @@
 		}
 	});
 
-	function handleScan(text: string) {
+	async function handleScan(text: string) {
 		if (text === lastResult) return;
 		lastResult = text;
 
@@ -52,21 +52,44 @@
 			return;
 		}
 
-		// Check if it's a known QR code format (e.g. STOCK:item:id or STOCK:container:id)
+		// Check if it's a known QR code format (e.g. STOCK:item:customId or STOCK:container:customId)
 		if (text.startsWith('STOCK:')) {
 			const parts = text.split(':');
 			if (parts[1] === 'item' && parts[2]) {
-				goto(`/app/items/${parts[2]}`);
-				return;
+				const result = await resolveByCustomId('item', parts[2]);
+				if (result) {
+					goto(`/app/items/${result}`);
+					return;
+				}
 			}
 			if (parts[1] === 'container' && parts[2]) {
-				goto(`/app/containers/${parts[2]}`);
-				return;
+				const result = await resolveByCustomId('container', parts[2]);
+				if (result) {
+					goto(`/app/containers/${result}`);
+					return;
+				}
 			}
 		}
 
 		// Otherwise show the raw result
 		errorMsg = '';
+	}
+
+	async function resolveByCustomId(
+		type: 'item' | 'container',
+		customId: string
+	): Promise<string | null> {
+		const queryName = type === 'item' ? 'itemByCustomId' : 'containerByCustomId';
+		const res = await fetch('/api/graphql', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				query: `query ($customId: String!) { ${queryName}(customId: $customId) }`,
+				variables: { customId }
+			})
+		});
+		const json = await res.json();
+		return json.data?.[queryName] ?? null;
 	}
 
 	function resetScan() {
