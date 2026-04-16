@@ -52,7 +52,16 @@ const bearerTokenHandle: Handle = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-// 3. Auth guard for /app routes + user DB upsert
+// 3. Auth guard for /app routes + domain whitelist + user DB upsert
+const whitelistDomains = configPrivate.ACCESS_DOMAIN_WHITELIST.split(',').filter(Boolean);
+const whitelistEmails = configPrivate.ACCESS_EMAIL_WHITELIST.split(',').filter(Boolean);
+
+function isEmailAllowed(email: string): boolean {
+	if (whitelistDomains.length === 0 && whitelistEmails.length === 0) return true;
+	const domain = email.split('@')[1];
+	return whitelistEmails.includes(email) || whitelistDomains.includes(domain);
+}
+
 const authGuardAndUpsert: Handle = async ({ event, resolve }) => {
 	if (event.url.pathname.startsWith('/app')) {
 		const isAuthenticated = await event.locals.logtoClient.isAuthenticated();
@@ -61,6 +70,10 @@ const authGuardAndUpsert: Handle = async ({ event, resolve }) => {
 		}
 
 		const user = event.locals.user;
+		if (user && user.email && !isEmailAllowed(user.email)) {
+			redirect(302, '/access-denied');
+		}
+
 		if (user) {
 			const sub = user.sub;
 			const email = user.email ?? '';

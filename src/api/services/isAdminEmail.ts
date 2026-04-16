@@ -1,8 +1,8 @@
 import { configPrivate } from '$config/private';
 
 export function isAdminEmail(email: string) {
-	const whitelistEmails = configPrivate.ADMIN_EMAIL_WHITELIST.split(',').filter(Boolean);
-	const whitelistDomains = configPrivate.ADMIN_DOMAIN_WHITELIST.split(',').filter(Boolean);
+	const whitelistEmails = configPrivate.ACCESS_EMAIL_WHITELIST.split(',').filter(Boolean);
+	const whitelistDomains = configPrivate.ACCESS_DOMAIN_WHITELIST.split(',').filter(Boolean);
 	const domain = email.split('@')[1];
 
 	return whitelistEmails.includes(email) || whitelistDomains.includes(domain);

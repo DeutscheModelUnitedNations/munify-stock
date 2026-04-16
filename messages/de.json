@@ -227,5 +227,10 @@
 	"commentPlaceholder": "Kommentar schreiben...",
 	"replyPlaceholder": "Antwort schreiben...",
 	"editComment": "Bearbeiten",
-	"editContainer": "Behälter bearbeiten"
+	"editContainer": "Behälter bearbeiten",
+
+	"accessDeniedTitle": "Zugriff verweigert",
+	"accessDeniedMessage": "Dein Konto ({email}) hat keinen Zugriff auf diese Anwendung. Nur Benutzer mit einer autorisierten E-Mail-Domain können MUNify STOCK verwenden.",
+	"accessDeniedContact": "Wenn du glaubst, dass dies ein Fehler ist, wende dich bitte an dein Organisationsteam.",
+	"accessDeniedLogout": "Mit anderem Konto anmelden"
 }

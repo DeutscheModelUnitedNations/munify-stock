@@ -76,7 +76,7 @@ See `.env.example` for all required variables. Key ones:
 | `LOGTO_COOKIE_ENCRYPTION_KEY` | Random string for session cookie encryption      |
 | `LOGTO_ROLE_CLAIM`            | JWT claim name for roles                         |
 | `LOGTO_API_RESOURCE`          | API resource identifier for M2M token validation |
-| `ADMIN_DOMAIN_WHITELIST`      | Comma-separated email domains for admin access   |
+| `ACCESS_DOMAIN_WHITELIST`     | Comma-separated email domains for app access     |
 
 ## FAQ
 

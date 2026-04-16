@@ -101,7 +101,7 @@ bun run generate:client  # dev server must be running
 - User upserted to DB on each authenticated `/app` request
 - M2M auth via `Authorization: Bearer <token>` header, validated with JWKS (`jose`)
 - Roles: "admin" (full access), "member" (standard access)
-- Additional admin access via `ADMIN_DOMAIN_WHITELIST` (e.g., `@dmun.de`)
+- Access gated by `ACCESS_DOMAIN_WHITELIST` (e.g., `@dmun.de`)
 - Context provides `mustBeLoggedIn()`, `hasRole()` for GraphQL resolvers (supports both session and M2M)
 - `isGlobalAdmin()` checks admin role OR whitelisted email/domain
 

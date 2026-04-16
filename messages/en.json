@@ -227,5 +227,10 @@
 	"commentPlaceholder": "Write a comment...",
 	"replyPlaceholder": "Write a reply...",
 	"editComment": "Edit",
-	"editContainer": "Edit Container"
+	"editContainer": "Edit Container",
+
+	"accessDeniedTitle": "Access Denied",
+	"accessDeniedMessage": "Your account ({email}) does not have access to this application. Only users with an authorized email domain can use MUNify STOCK.",
+	"accessDeniedContact": "If you believe this is a mistake, please contact your organization team.",
+	"accessDeniedLogout": "Sign in with a different account"
 }

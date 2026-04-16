@@ -10,8 +10,8 @@ const schema = z.object({
 	LOGTO_ROLE_CLAIM: z.optional(z.string()),
 	LOGTO_API_RESOURCE: z.optional(z.string()),
 	NODE_ENV: z.union([z.literal('development'), z.literal('production'), z.literal('test')]),
-	ADMIN_EMAIL_WHITELIST: z.string().optional().default(''),
-	ADMIN_DOMAIN_WHITELIST: z.string().optional().default('')
+	ACCESS_EMAIL_WHITELIST: z.string().optional().default(''),
+	ACCESS_DOMAIN_WHITELIST: z.string().optional().default('')
 });
 
 export const configPrivate = getConfig({ schema, envSource: env });
