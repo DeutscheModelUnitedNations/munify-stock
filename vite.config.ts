@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import { paraglideVitePlugin } from '@inlang/paraglide-js';
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
@@ -14,5 +15,16 @@ export default defineConfig({
 			strategy: ['cookie', 'preferredLanguage', 'baseLocale']
 		}),
 		sveltekit()
-	]
+	],
+	server: {
+		https: fs.existsSync('.certs/cert.pem')
+			? {
+					cert: fs.readFileSync('.certs/cert.pem'),
+					key: fs.readFileSync('.certs/key.pem')
+				}
+			: undefined
+	},
+	ssr: {
+		external: ['pg']
+	}
 });

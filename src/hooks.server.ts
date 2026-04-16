@@ -64,9 +64,16 @@ function isEmailAllowed(email: string): boolean {
 
 const authGuardAndUpsert: Handle = async ({ event, resolve }) => {
 	if (event.url.pathname.startsWith('/app')) {
-		const isAuthenticated = await event.locals.logtoClient.isAuthenticated();
-		if (!isAuthenticated) {
-			await event.locals.logtoClient.signIn(`${event.url.origin}/callback`);
+		try {
+			const isAuthenticated = await event.locals.logtoClient.isAuthenticated();
+			if (!isAuthenticated) {
+				await event.locals.logtoClient.signIn(`${event.url.origin}/callback`);
+			}
+		} catch (e) {
+			// Re-throw redirects (SvelteKit uses thrown responses for redirects)
+			if (e && typeof e === 'object' && 'status' in e && 'location' in e) throw e;
+			console.error('[authGuard] Auth check failed:', e);
+			throw e;
 		}
 
 		const user = event.locals.user;
@@ -93,13 +100,18 @@ const authGuardAndUpsert: Handle = async ({ event, resolve }) => {
 				}
 			}
 
-			await db
-				.insert(schema.user)
-				.values({ id: sub, locale, preferredUsername, email, familyName, givenName })
-				.onConflictDoUpdate({
-					target: schema.user.id,
-					set: { locale, preferredUsername, email, familyName, givenName }
-				});
+			try {
+				await db
+					.insert(schema.user)
+					.values({ id: sub, locale, preferredUsername, email, familyName, givenName })
+					.onConflictDoUpdate({
+						target: schema.user.id,
+						set: { locale, preferredUsername, email, familyName, givenName }
+					});
+			} catch (e) {
+				console.error('[authGuard] DB upsert failed:', e);
+				throw e;
+			}
 		}
 	}
 

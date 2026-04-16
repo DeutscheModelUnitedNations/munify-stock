@@ -29,24 +29,36 @@ MUNify STOCK is inventory management software for Model United Nations conferenc
 
 - [Bun](https://bun.sh) (package manager & runtime)
 - [Docker](https://www.docker.com/) (for PostgreSQL)
+- [mkcert](https://github.com/FiloSottile/mkcert) (for local HTTPS)
 
 ### Setup
 
 ```bash
-# Install dependencies
+# 1. Install dependencies
 bun install
 
-# Start PostgreSQL, then dev server
+# 2. Set up environment variables
+cp .env.example .env
+# Edit .env with your Logto credentials and database URL
+
+# 3. Generate local HTTPS certificates (required)
+mkcert -install
+mkdir -p .certs
+mkcert -key-file .certs/key.pem -cert-file .certs/cert.pem localhost 127.0.0.1 ::1
+
+# 4. Start PostgreSQL, then dev server
 bun run dev
 
-# Push database schema
+# 5. Push database schema
 bun run db:push
 
-# Generate the GraphQL client (dev server must be running)
+# 6. Generate the GraphQL client (dev server must be running)
 bun run generate:client
 ```
 
-The app will be available at `http://localhost:5173`. You'll need a Logto instance configured (see `.env.example`).
+The app will be available at `https://localhost:5173`. You'll need a Logto instance configured (see `.env.example`).
+
+> **Why HTTPS in dev?** The app uses Server-Sent Events (SSE) for live GraphQL subscriptions, with each subscription holding an open HTTP connection. Browsers limit concurrent connections to ~6 per origin on HTTP/1.1, which the app easily exceeds. HTTPS enables HTTP/2, which multiplexes all requests over a single connection and eliminates this limit.
 
 ### Scripts
 
