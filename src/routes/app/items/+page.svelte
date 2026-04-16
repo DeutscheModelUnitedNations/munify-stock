@@ -208,7 +208,7 @@
 {#snippet commentCountCell(count: number)}
 	{#if count > 0}
 		<span class="badge badge-sm badge-warning">
-			<i class="fa-duotone fa-comment mr-1"></i>{count}
+			<i class="fa-solid fa-comment mr-1"></i>{count}
 		</span>
 	{:else}
 		<span class="opacity-40">--</span>
