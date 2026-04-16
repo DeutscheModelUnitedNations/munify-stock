@@ -10,6 +10,6 @@
 	let { children, selected = false, class: className = '', ...rest }: Props = $props();
 </script>
 
-<tr class="cursor-pointer hover:!bg-base-300 {selected ? 'bg-accent' : ''} {className}" {...rest}>
+<tr class="cursor-pointer hover:!bg-base-200 {selected ? 'bg-accent' : ''} {className}" {...rest}>
 	{@render children()}
 </tr>
