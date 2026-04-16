@@ -3,6 +3,7 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import FormFieldset from '$lib/components/FormFieldset.svelte';
+	import { openContainerDrawer } from '$lib/components/EntityDrawer/entityDrawerState.svelte';
 	import * as m from '$lib/paraglide/messages';
 
 	import type { NamedView } from '$lib/types/views';
@@ -40,7 +41,8 @@
 				id: true
 			});
 			if (result?.id) {
-				goto(`/app/containers/${result.id}`);
+				goto('/app/containers');
+				openContainerDrawer(result.id);
 			}
 		} finally {
 			submitting = false;

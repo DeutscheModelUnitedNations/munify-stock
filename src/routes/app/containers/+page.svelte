@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { client } from '$lib/generated-client/client';
 	import { browser } from '$app/environment';
-	import { goto } from '$app/navigation';
 	import * as m from '$lib/paraglide/messages';
+	import { openContainerDrawer } from '$lib/components/EntityDrawer/entityDrawerState.svelte';
 	import {
 		createSvelteTable,
 		FlexRender,
@@ -112,10 +112,10 @@
 </script>
 
 {#snippet labelCell(props: { id: string; label: string | null })}
-	<a href="/app/containers/{props.id}" class="link font-medium link-hover">
+	<button onclick={() => openContainerDrawer(props.id)} class="link font-medium link-hover">
 		<i class="fa-duotone fa-box mr-1 text-primary"></i>
 		{props.label ?? 'Unnamed'}
-	</a>
+	</button>
 {/snippet}
 
 {#snippet customIdCell(customId: string | null)}
@@ -213,7 +213,7 @@
 		</DataTable.Header>
 		<DataTable.Body>
 			{#each table.getRowModel().rows as row (row.id)}
-				<DataTable.Row onclick={() => goto('/app/containers/' + row.original.id)}>
+				<DataTable.Row onclick={() => openContainerDrawer(row.original.id)}>
 					{#each row.getVisibleCells() as cell (cell.id)}
 						<DataTable.Cell>
 							<FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />

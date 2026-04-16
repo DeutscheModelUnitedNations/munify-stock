@@ -5,6 +5,10 @@
 	import { onMount, onDestroy } from 'svelte';
 	import Fuse from 'fuse.js';
 	import * as m from '$lib/paraglide/messages';
+	import {
+		openItemDrawer,
+		openContainerDrawer
+	} from '$lib/components/EntityDrawer/entityDrawerState.svelte';
 
 	let open = $state(false);
 	let query = $state('');
@@ -144,7 +148,13 @@
 	function navigate(result: SearchResult) {
 		open = false;
 		query = '';
-		goto(result.href);
+		if (result.type === 'item') {
+			openItemDrawer(result.id);
+		} else if (result.type === 'container') {
+			openContainerDrawer(result.id);
+		} else {
+			goto(result.href);
+		}
 	}
 
 	export function openSearch() {

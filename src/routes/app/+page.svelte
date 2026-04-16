@@ -2,6 +2,10 @@
 	import { client } from '$lib/generated-client/client';
 	import { browser } from '$app/environment';
 	import * as m from '$lib/paraglide/messages';
+	import {
+		openItemDrawer,
+		openContainerDrawer
+	} from '$lib/components/EntityDrawer/entityDrawerState.svelte';
 	import type {
 		DashboardItemView,
 		DashboardContainerView,
@@ -207,24 +211,24 @@
 				</h2>
 				<div class="flex flex-col gap-2">
 					{#each movedContainers as container}
-						<a
-							href="/app/containers/{container.id}"
-							class="flex items-center gap-2 rounded-lg p-2 text-sm hover:bg-base-200"
+						<button
+							onclick={() => openContainerDrawer(container.id)}
+							class="flex w-full items-center gap-2 rounded-lg p-2 text-left text-sm hover:bg-base-200"
 						>
 							<i class="fa-solid fa-box text-secondary"></i>
 							<span class="flex-1 font-medium">{container.label ?? 'Unnamed'}</span>
 							<span class="text-xs opacity-60">{container.temporaryLocation}</span>
-						</a>
+						</button>
 					{/each}
 					{#each movedItems as item}
-						<a
-							href="/app/items/{item.id}"
-							class="flex items-center gap-2 rounded-lg p-2 text-sm hover:bg-base-200"
+						<button
+							onclick={() => openItemDrawer(item.id)}
+							class="flex w-full items-center gap-2 rounded-lg p-2 text-left text-sm hover:bg-base-200"
 						>
 							<i class="fa-solid fa-cube text-primary"></i>
 							<span class="flex-1 font-medium">{item.name}</span>
 							<span class="text-xs opacity-60">{item.temporaryLocation}</span>
-						</a>
+						</button>
 					{/each}
 				</div>
 			</div>

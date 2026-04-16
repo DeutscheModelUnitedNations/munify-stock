@@ -14,7 +14,7 @@
 	let qrDataUrl = $state('');
 
 	onMount(async () => {
-		if (!browser) return;
+		if (!browser || !value) return;
 		const QRCode = await import('qrcode');
 		qrDataUrl = await QRCode.toDataURL(value, { width: 200, margin: 2 });
 	});

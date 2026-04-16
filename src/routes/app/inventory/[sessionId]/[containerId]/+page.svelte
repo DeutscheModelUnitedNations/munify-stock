@@ -3,6 +3,7 @@
 	import { browser } from '$app/environment';
 	import { page } from '$app/state';
 	import * as m from '$lib/paraglide/messages';
+	import { openItemDrawer } from '$lib/components/EntityDrawer/entityDrawerState.svelte';
 
 	import type {
 		InventoryCheckDetailView,
@@ -199,9 +200,12 @@
 
 						<div class="flex-1">
 							<div class="flex items-center gap-2">
-								<a href="/app/items/{item.id}" class="text-sm font-medium hover:underline">
+								<button
+									onclick={() => openItemDrawer(item.id)}
+									class="text-sm font-medium hover:underline"
+								>
 									{item.name}
-								</a>
+								</button>
 								{#if item.warningFlag}
 									<i class="fa-solid fa-triangle-exclamation text-xs text-warning"></i>
 								{/if}

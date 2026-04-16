@@ -5,6 +5,7 @@
 	import NavMenuButton from '$lib/components/NavMenu/NavMenuButton.svelte';
 	import NavMenuSection from '$lib/components/NavMenu/NavMenuSection.svelte';
 	import SearchModal from '$lib/components/SearchModal.svelte';
+	import EntityDrawer from '$lib/components/EntityDrawer/EntityDrawer.svelte';
 	import Breadcrumbs from './Breadcrumbs.svelte';
 	import * as m from '$lib/paraglide/messages';
 
@@ -137,3 +138,4 @@
 </div>
 
 <SearchModal bind:this={searchModal} />
+<EntityDrawer />

@@ -1,100 +1,78 @@
 <script lang="ts">
 	import { client } from '$lib/generated-client/client';
-	import { browser } from '$app/environment';
-	import { goto } from '$app/navigation';
 	import FormFieldset from '$lib/components/FormFieldset.svelte';
-	import { openItemDrawer } from '$lib/components/EntityDrawer/entityDrawerState.svelte';
 	import * as m from '$lib/paraglide/messages';
 
-	import type { NamedView, ContainerFormView } from '$lib/types/views';
+	import type { ItemDetailView, NamedView, ContainerFormView } from '$lib/types/views';
 
-	let itemTypes = $state<NamedView[]>([]);
-	let containers = $state<ContainerFormView[]>([]);
-	let locations = $state<NamedView[]>([]);
+	interface Props {
+		item: ItemDetailView;
+		itemTypes: NamedView[];
+		containers: ContainerFormView[];
+		locations: NamedView[];
+		onsaved: () => void;
+	}
+
+	let { item, itemTypes, containers, locations, onsaved }: Props = $props();
+
 	let submitting = $state(false);
 	let placementMode = $state<'container' | 'location'>('container');
 	let isTemporarilyMoved = $state(false);
 	let aliases = $state<string[]>([]);
 	let aliasInput = $state('');
 
-	if (browser) {
-		const typesQuery = client.liveQuery.itemTypes({ id: true, name: true });
-		typesQuery.subscribe((v) => {
-			if (v) itemTypes = v;
-		});
-
-		const containersQuery = client.liveQuery.containers({
-			id: true,
-			label: true,
-			description: true
-		});
-		containersQuery.subscribe((v) => {
-			if (v) containers = v;
-		});
-
-		const locationsQuery = client.liveQuery.locations({ id: true, name: true });
-		locationsQuery.subscribe((v) => {
-			if (v) locations = v;
-		});
-	}
+	$effect(() => {
+		placementMode = item.containerId ? 'container' : 'location';
+		isTemporarilyMoved = item.isTemporarilyMoved ?? false;
+		aliases = [...(item.aliases ?? [])];
+	});
 
 	async function handleSubmit(e: SubmitEvent) {
 		e.preventDefault();
 		submitting = true;
 		const form = new FormData(e.target as HTMLFormElement);
-		const name = form.get('name') as string;
-		const customId = (form.get('customId') as string) || undefined;
-		const typeId = (form.get('typeId') as string) || undefined;
-		const description = (form.get('description') as string) || undefined;
-		const quantity = form.get('quantity') ? Number(form.get('quantity')) : undefined;
-		const serialNumber = (form.get('serialNumber') as string) || undefined;
 
 		const containerId =
 			placementMode === 'container' ? (form.get('containerId') as string) || undefined : undefined;
 		const locationId =
 			placementMode === 'location' ? (form.get('locationId') as string) || undefined : undefined;
-
 		const temporaryLocation = isTemporarilyMoved
 			? (form.get('temporaryLocation') as string) || undefined
 			: undefined;
 
 		try {
-			const result = await client.mutate.createItem({
+			await client.mutate.updateItem({
 				__args: {
-					name,
-					customId,
-					typeId,
-					description,
+					id: item.id,
+					name: (form.get('name') as string) || undefined,
+					customId: (form.get('customId') as string) || undefined,
+					typeId: (form.get('typeId') as string) || undefined,
+					description: (form.get('description') as string) || undefined,
+					quantity: form.get('quantity') ? Number(form.get('quantity')) : undefined,
+					serialNumber: (form.get('serialNumber') as string) || undefined,
+					value: form.get('value') ? Math.round(Number(form.get('value')) * 100) : undefined,
+					locationDetail: (form.get('locationDetail') as string) || undefined,
 					containerId,
 					locationId,
-					quantity,
-					serialNumber,
 					isTemporarilyMoved,
 					temporaryLocation,
 					aliases
 				},
 				id: true
 			});
-			if (result?.id) {
-				goto('/app/items');
-				openItemDrawer(result.id);
-			}
+			onsaved();
 		} finally {
 			submitting = false;
 		}
 	}
 </script>
 
-<div class="mx-auto max-w-2xl">
-	<h1 class="mb-6 text-2xl font-bold">
-		<i class="fa-duotone fa-plus mr-2"></i>{m.newItem()}
-	</h1>
-
-	<form onsubmit={handleSubmit} class="flex flex-col gap-4">
+<form onsubmit={handleSubmit} class="flex flex-col gap-4">
+	<div class="grid grid-cols-1 gap-4 xl:grid-cols-3">
 		<FormFieldset title={m.general()}>
 			<fieldset class="fieldset">
 				<legend class="fieldset-legend">{m.itemName()} *</legend>
-				<input name="name" type="text" class="input w-full" required />
+				<input name="name" type="text" class="input w-full" required value={item.name} />
 			</fieldset>
 
 			<fieldset class="fieldset">
@@ -102,14 +80,16 @@
 				<select name="typeId" class="select w-full">
 					<option value="">{m.itemNoType()}</option>
 					{#each itemTypes as type}
-						<option value={type.id}>{type.name}</option>
+						<option value={type.id} selected={type.id === item.type?.id}>{type.name}</option>
 					{/each}
 				</select>
 			</fieldset>
 
 			<fieldset class="fieldset">
 				<legend class="fieldset-legend">{m.itemDescription()}</legend>
-				<textarea name="description" class="textarea w-full" rows="3"></textarea>
+				<textarea name="description" class="textarea w-full" rows="3"
+					>{item.description ?? ''}</textarea
+				>
 			</fieldset>
 
 			<fieldset class="fieldset">
@@ -158,9 +138,8 @@
 					type="text"
 					class="input w-full"
 					pattern="^[a-zA-Z0-9\-._]+$"
-					placeholder={m.customIdPlaceholder()}
+					value={item.customId ?? ''}
 				/>
-				<p class="mt-1 text-xs text-base-content/50">{m.customIdHint()}</p>
 			</fieldset>
 
 			<fieldset class="fieldset">
@@ -170,16 +149,40 @@
 					type="number"
 					min="1"
 					class="input w-full"
-					placeholder={m.leaveEmptyForIndividual()}
+					value={item.quantity ?? ''}
 				/>
-				<p class="mt-1 text-xs text-base-content/50">
-					{m.itemQuantityHint()}
-				</p>
 			</fieldset>
 
 			<fieldset class="fieldset">
 				<legend class="fieldset-legend">{m.itemSerialNumber()}</legend>
-				<input name="serialNumber" type="text" class="input w-full" />
+				<input
+					name="serialNumber"
+					type="text"
+					class="input w-full"
+					value={item.serialNumber ?? ''}
+				/>
+			</fieldset>
+
+			<fieldset class="fieldset">
+				<legend class="fieldset-legend">{m.itemValue()} (EUR)</legend>
+				<input
+					name="value"
+					type="number"
+					step="0.01"
+					min="0"
+					class="input w-full"
+					value={item.value != null ? (item.value / 100).toFixed(2) : ''}
+				/>
+			</fieldset>
+
+			<fieldset class="fieldset">
+				<legend class="fieldset-legend">{m.itemLocationDetail()}</legend>
+				<input
+					name="locationDetail"
+					type="text"
+					class="input w-full"
+					value={item.locationDetail ?? ''}
+				/>
 			</fieldset>
 		</FormFieldset>
 
@@ -214,7 +217,7 @@
 					<select name="containerId" class="select w-full">
 						<option value="">{m.itemNoContainer()}</option>
 						{#each containers as container}
-							<option value={container.id}>
+							<option value={container.id} selected={container.id === item.containerId}>
 								{container.label ?? 'Unnamed'}{container.description
 									? ` - ${container.description}`
 									: ''}
@@ -228,7 +231,7 @@
 					<select name="locationId" class="select w-full">
 						<option value="">{m.noLocation()}</option>
 						{#each locations as loc}
-							<option value={loc.id}>{loc.name}</option>
+							<option value={loc.id} selected={loc.id === item.locationId}>{loc.name}</option>
 						{/each}
 					</select>
 				</fieldset>
@@ -249,24 +252,21 @@
 						type="text"
 						class="input w-full"
 						placeholder={m.temporaryLocationPlaceholder()}
+						value={item.temporaryLocation ?? ''}
 					/>
 				</fieldset>
 			{/if}
 		</FormFieldset>
+	</div>
 
-		<div class="mt-2 flex gap-2">
-			<a href="/app/items" class="btn btn-ghost">
-				<i class="fa-solid fa-arrow-left"></i>
-				{m.cancel()}
-			</a>
-			<button type="submit" class="btn flex-1 btn-primary" disabled={submitting}>
-				{#if submitting}
-					<span class="loading loading-sm loading-spinner"></span>
-				{:else}
-					<i class="fa-solid fa-save"></i>
-				{/if}
-				{m.newItem()}
-			</button>
-		</div>
-	</form>
-</div>
+	<div class="mt-2 flex gap-2">
+		<button type="submit" class="btn flex-1 btn-primary" disabled={submitting}>
+			{#if submitting}
+				<span class="loading loading-sm loading-spinner"></span>
+			{:else}
+				<i class="fa-solid fa-save"></i>
+			{/if}
+			{m.save()}
+		</button>
+	</div>
+</form>

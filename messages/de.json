@@ -206,5 +206,8 @@
 	"temporarilyAt": "Vorübergehend: {location}",
 
 	"entries": "Einträge",
-	"status": "Status"
+	"status": "Status",
+
+	"editItem": "Artikel bearbeiten",
+	"soloItem": "Einzelartikel (ohne Behälter)"
 }

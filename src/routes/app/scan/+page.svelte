@@ -4,6 +4,10 @@
 	import { onMount, onDestroy } from 'svelte';
 	import type { Html5Qrcode } from 'html5-qrcode';
 	import * as m from '$lib/paraglide/messages';
+	import {
+		openItemDrawer,
+		openContainerDrawer
+	} from '$lib/components/EntityDrawer/entityDrawerState.svelte';
 
 	let scannerEl: HTMLDivElement;
 	let scanner: Html5Qrcode | null = null;
@@ -58,14 +62,14 @@
 			if (parts[1] === 'item' && parts[2]) {
 				const result = await resolveByCustomId('item', parts[2]);
 				if (result) {
-					goto(`/app/items/${result}`);
+					openItemDrawer(result);
 					return;
 				}
 			}
 			if (parts[1] === 'container' && parts[2]) {
 				const result = await resolveByCustomId('container', parts[2]);
 				if (result) {
-					goto(`/app/containers/${result}`);
+					openContainerDrawer(result);
 					return;
 				}
 			}

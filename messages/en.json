@@ -206,5 +206,8 @@
 	"temporarilyAt": "Temporarily at: {location}",
 
 	"entries": "Entries",
-	"status": "Status"
+	"status": "Status",
+
+	"editItem": "Edit Item",
+	"soloItem": "Solo item (no container)"
 }

@@ -1,8 +1,11 @@
 <script lang="ts">
 	import { client } from '$lib/generated-client/client';
 	import { browser } from '$app/environment';
-	import { goto } from '$app/navigation';
 	import * as m from '$lib/paraglide/messages';
+	import {
+		openItemDrawer,
+		openContainerDrawer
+	} from '$lib/components/EntityDrawer/entityDrawerState.svelte';
 	import {
 		createSvelteTable,
 		FlexRender,
@@ -63,14 +66,19 @@
 
 	const columns: ColumnDef<ItemListView>[] = [
 		{
+			accessorKey: 'name',
+			header: m.itemName(),
+			cell: ({ row }) =>
+				renderSnippet(nameCell, {
+					id: row.original.id,
+					name: row.original.name,
+					quantity: row.original.quantity
+				})
+		},
+		{
 			accessorKey: 'customId',
 			header: m.customId(),
 			cell: ({ row }) => renderSnippet(customIdCell, row.original.customId)
-		},
-		{
-			accessorKey: 'name',
-			header: m.itemName(),
-			cell: ({ row }) => renderSnippet(nameCell, { id: row.original.id, name: row.original.name })
 		},
 		{
 			id: 'type',
@@ -134,8 +142,15 @@
 	<span class="font-mono text-xs opacity-70">{customId ?? '--'}</span>
 {/snippet}
 
-{#snippet nameCell(props: { id: string; name: string })}
-	<a href="/app/items/{props.id}" class="link font-medium link-hover">{props.name}</a>
+{#snippet nameCell(props: { id: string; name: string; quantity: number | null })}
+	<button onclick={() => openItemDrawer(props.id)} class="link font-medium link-hover">
+		{#if props.quantity && props.quantity > 1}
+			<i class="fa-duotone fa-cubes mr-1 text-primary"></i>
+		{:else}
+			<i class="fa-duotone fa-cube mr-1 text-primary"></i>
+		{/if}
+		{props.name}
+	</button>
 {/snippet}
 
 {#snippet badgeCell(value: string | null)}
@@ -148,9 +163,10 @@
 
 {#snippet containerCell(container: { id: string; label: string | null } | null)}
 	{#if container}
-		<a href="/app/containers/{container.id}" class="link link-hover">
+		<button onclick={() => openContainerDrawer(container.id)} class="link link-hover">
+			<i class="fa-duotone fa-box mr-1 text-primary"></i>
 			{container.label ?? 'Container'}
-		</a>
+		</button>
 	{:else}
 		<span class="opacity-40">--</span>
 	{/if}
@@ -229,7 +245,7 @@
 		</DataTable.Header>
 		<DataTable.Body>
 			{#each table.getRowModel().rows as row (row.id)}
-				<DataTable.Row onclick={() => goto('/app/items/' + row.original.id)}>
+				<DataTable.Row onclick={() => openItemDrawer(row.original.id)}>
 					{#each row.getVisibleCells() as cell (cell.id)}
 						<DataTable.Cell>
 							<FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
