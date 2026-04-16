@@ -216,7 +216,7 @@
 		</label>
 	</div>
 
-	<DataTable.Root class="table-zebra">
+	<DataTable.Root>
 		<DataTable.Header>
 			{#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
 				<tr>
