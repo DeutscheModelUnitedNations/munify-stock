@@ -5,21 +5,35 @@ import { GraphQLError } from 'graphql';
 export const oidcRoles = ['admin', 'member'] as const;
 
 export async function context(req: RequestEvent) {
-	const OIDCRoleNames: string[] = [];
-	if (configPrivate.OIDC_ROLE_CLAIM) {
-		const tokenData = (req.locals.oidc?.accessToken ?? {}) as Record<string, unknown>;
-		const idTokenData = (req.locals.oidc?.idToken ?? {}) as Record<string, unknown>;
-		const rolesRaw =
-			tokenData[configPrivate.OIDC_ROLE_CLAIM] ?? idTokenData[configPrivate.OIDC_ROLE_CLAIM];
+	const roleNames: string[] = [];
+
+	if (configPrivate.LOGTO_ROLE_CLAIM) {
+		// Session auth: extract roles from ID token claims or user info
+		let rolesRaw: unknown;
+
+		if (req.locals.user) {
+			const claims = await req.locals.logtoClient?.getIdTokenClaims?.().catch(() => null);
+			rolesRaw =
+				(claims as Record<string, unknown>)?.[configPrivate.LOGTO_ROLE_CLAIM] ??
+				(req.locals.user as Record<string, unknown>)?.[configPrivate.LOGTO_ROLE_CLAIM];
+		}
+
+		// M2M auth: extract roles from scope claim
+		if (!rolesRaw && req.locals.m2mToken) {
+			const scope = req.locals.m2mToken.scope;
+			if (typeof scope === 'string') {
+				roleNames.push(...scope.split(' '));
+			}
+		}
+
 		if (rolesRaw) {
-			// Support both Logto format (array of role objects/strings) and Zitadel format (object with role keys)
 			if (Array.isArray(rolesRaw)) {
 				for (const role of rolesRaw) {
 					const name = typeof role === 'string' ? role : (role as Record<string, unknown>)?.name;
-					if (typeof name === 'string') OIDCRoleNames.push(name);
+					if (typeof name === 'string') roleNames.push(name);
 				}
 			} else if (typeof rolesRaw === 'object') {
-				OIDCRoleNames.push(...Object.keys(rolesRaw as Record<string, unknown>));
+				roleNames.push(...Object.keys(rolesRaw as Record<string, unknown>));
 			}
 		}
 	}
@@ -27,14 +41,20 @@ export async function context(req: RequestEvent) {
 	return {
 		...req.locals,
 		mustBeLoggedIn: () => {
-			if (!req.locals.oidc?.user) {
-				throw new GraphQLError('Must be logged in');
+			if (req.locals.user) {
+				return req.locals.user;
 			}
 
-			return req.locals.oidc.user;
+			if (req.locals.m2mToken) {
+				return { sub: req.locals.m2mToken.sub as string, email: null } as unknown as NonNullable<
+					typeof req.locals.user
+				>;
+			}
+
+			throw new GraphQLError('Must be logged in');
 		},
 		hasRole(role: string) {
-			return OIDCRoleNames.includes(role);
+			return roleNames.includes(role);
 		}
 	};
 }

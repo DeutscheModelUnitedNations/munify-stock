@@ -1,6 +1,5 @@
-import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async () => {
-	redirect(302, '/');
+export const load: PageServerLoad = async ({ locals, url }) => {
+	await locals.logtoClient.signOut(url.origin + '/');
 };

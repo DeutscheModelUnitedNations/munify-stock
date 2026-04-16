@@ -20,7 +20,7 @@ MUNify STOCK is inventory management software for Model United Nations conferenc
 - **Frontend**: SvelteKit 2, Svelte 5 (runes), Tailwind CSS 4, DaisyUI 5
 - **Backend**: GraphQL via [rumble](https://github.com/m1212e/rumble) (Pothos + GraphQL Yoga)
 - **Database**: PostgreSQL via Drizzle ORM
-- **Auth**: OIDC via `@m1212e/sveltekit-oidc`
+- **Auth**: OIDC via `@logto/sveltekit` (Logto) + M2M bearer token support
 - **GraphQL Client**: rumble's built-in client generator (URQL-based)
 
 ## Develop Locally
@@ -28,7 +28,7 @@ MUNify STOCK is inventory management software for Model United Nations conferenc
 ### Prerequisites
 
 - [Bun](https://bun.sh) (package manager & runtime)
-- [Docker](https://www.docker.com/) (for PostgreSQL & mock OIDC server)
+- [Docker](https://www.docker.com/) (for PostgreSQL)
 
 ### Setup
 
@@ -36,7 +36,7 @@ MUNify STOCK is inventory management software for Model United Nations conferenc
 # Install dependencies
 bun install
 
-# Start PostgreSQL + mock OIDC server, then dev server
+# Start PostgreSQL, then dev server
 bun run dev
 
 # Push database schema
@@ -46,7 +46,7 @@ bun run db:push
 bun run generate:client
 ```
 
-The app will be available at `http://localhost:5173`. The mock OIDC login page has preset "admin" and "member" users.
+The app will be available at `http://localhost:5173`. You'll need a Logto instance configured (see `.env.example`).
 
 ### Scripts
 
@@ -67,14 +67,16 @@ The app will be available at `http://localhost:5173`. The mock OIDC login page h
 
 See `.env.example` for all required variables. Key ones:
 
-| Variable                 | Description                                    |
-| ------------------------ | ---------------------------------------------- |
-| `DATABASE_URL`           | PostgreSQL connection string                   |
-| `PUBLIC_OIDC_AUTHORITY`  | OIDC discovery URL                             |
-| `PUBLIC_OIDC_CLIENT_ID`  | OAuth2 client ID                               |
-| `OIDC_SCOPES`            | OIDC scopes (default includes profile, email)  |
-| `OIDC_ROLE_CLAIM`        | JWT claim name for roles                       |
-| `ADMIN_DOMAIN_WHITELIST` | Comma-separated email domains for admin access |
+| Variable                      | Description                                      |
+| ----------------------------- | ------------------------------------------------ |
+| `DATABASE_URL`                | PostgreSQL connection string                     |
+| `PUBLIC_LOGTO_ENDPOINT`       | Logto instance URL                               |
+| `PUBLIC_LOGTO_APP_ID`         | Logto application ID                             |
+| `LOGTO_APP_SECRET`            | Logto application secret                         |
+| `LOGTO_COOKIE_ENCRYPTION_KEY` | Random string for session cookie encryption      |
+| `LOGTO_ROLE_CLAIM`            | JWT claim name for roles                         |
+| `LOGTO_API_RESOURCE`          | API resource identifier for M2M token validation |
+| `ADMIN_DOMAIN_WHITELIST`      | Comma-separated email domains for admin access   |
 
 ## FAQ
 

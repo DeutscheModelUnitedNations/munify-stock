@@ -30,16 +30,20 @@ services:
       - ORIGIN=https://{your origin}
 
       # variables which are exposed to the client must be prefixed with PUBLIC_
-      - PUBLIC_OIDC_AUTHORITY=https://guard.munify.cloud
-      - PUBLIC_OIDC_CLIENT_ID=275671515582758948@dev
+      - PUBLIC_LOGTO_ENDPOINT=https://your-logto-instance.logto.app
+      - PUBLIC_LOGTO_APP_ID=your-app-id
+      - LOGTO_APP_SECRET=your-app-secret
+      - LOGTO_COOKIE_ENCRYPTION_KEY=a-random-string-at-least-32-characters
       #
-      # Please make sure that your OIDC auth provider allows
+      # Please make sure that your Logto application allows
       #
-      # https://{your origin}/auth/login-callback
-      # https://{your origin}/auth/logout-callback
+      # https://{your origin}/callback
       #
-      # for login and logout callbacks.
-      # You can set those in the redirect settings of your auth provider!
+      # as a redirect URI, and
+      #
+      # https://{your origin}/
+      #
+      # as a post sign-out redirect URI.
 
     # if you would like to disable the database migrations, you can use the following command instead
     # command: node ./index.js

@@ -53,8 +53,8 @@
 	"dependencies": {
 		"@deutschemodelunitednations/corporate-identity": "^1.1.10",
 		"@inlang/paraglide-js": "^2.16.0",
+		"@logto/sveltekit": "^0.3.23",
 		"@m1212e/rumble": "^0.16.31",
-		"@m1212e/sveltekit-oidc": "^0.0.39",
 		"@tanstack/table-core": "^8.21.3",
 		"@urql/core": "^6.0.1",
 		"@urql/exchange-graphcache": "^9.0.0",
@@ -66,6 +66,7 @@
 		"graphql-ws": "^6.0.8",
 		"graphql-yoga": "^5.21.0",
 		"html5-qrcode": "^2.3.8",
+		"jose": "^6.2.2",
 		"nanoid": "^5.1.7",
 		"pg": "^8.20.0",
 		"qrcode": "^1.5.4",
