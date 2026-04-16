@@ -100,6 +100,7 @@ export const item = pgTable(
 		value: integer(),
 		qrCode: text().unique(),
 		quantity: integer(),
+		quantityDescription: text(),
 		containerId: text().references(() => container.id),
 		locationId: text().references(() => location.id),
 		locationDetail: text(),
@@ -119,6 +120,10 @@ export const item = pgTable(
 		check(
 			'item_location_exclusivity',
 			sql`NOT ("container_id" IS NOT NULL AND "location_id" IS NOT NULL)`
+		),
+		check(
+			'item_quantity_exclusivity',
+			sql`NOT ("quantity" IS NOT NULL AND "quantity_description" IS NOT NULL)`
 		)
 	]
 );

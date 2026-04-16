@@ -123,9 +123,14 @@
 </script>
 
 {#snippet labelCell(props: { id: string; label: string | null })}
-	<button onclick={() => openContainerDrawer(props.id)} class="link font-medium link-hover">
-		<i class="fa-duotone fa-box mr-1 text-primary"></i>
-		{props.label ?? 'Unnamed'}
+	<button
+		onclick={() => openContainerDrawer(props.id)}
+		class="link text-left font-medium link-hover"
+	>
+		<span class="inline-flex items-baseline gap-1">
+			<i class="fa-duotone fa-box shrink-0 text-primary"></i>
+			<span>{props.label ?? 'Unnamed'}</span>
+		</span>
 	</button>
 {/snippet}
 
@@ -135,7 +140,8 @@
 
 {#snippet descriptionCell(description: string | null)}
 	{#if description}
-		<span class="max-w-48 truncate text-sm opacity-70">{description}</span>
+		<span class="block max-w-48 truncate text-sm opacity-70" title={description}>{description}</span
+		>
 	{:else}
 		<span class="opacity-40">--</span>
 	{/if}

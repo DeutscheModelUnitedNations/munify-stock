@@ -32,6 +32,7 @@ schemaBuilder.mutationFields((t) => ({
 			value: t.arg.int(),
 			qrCode: t.arg.string(),
 			quantity: t.arg.int(),
+			quantityDescription: t.arg.string(),
 			containerId: t.arg.id(),
 			locationId: t.arg.id(),
 			locationDetail: t.arg.string(),
@@ -47,6 +48,10 @@ schemaBuilder.mutationFields((t) => ({
 
 			if (args.containerId && args.locationId) {
 				throw new Error('An item cannot have both a container and a direct location');
+			}
+
+			if (args.quantity != null && args.quantityDescription != null) {
+				throw new Error('An item cannot have both quantity and quantityDescription');
 			}
 
 			const customId = await resolveCustomId(schema.item, args.customId);
@@ -87,6 +92,7 @@ schemaBuilder.mutationFields((t) => ({
 			value: t.arg.int(),
 			qrCode: t.arg.string(),
 			quantity: t.arg.int(),
+			quantityDescription: t.arg.string(),
 			containerId: t.arg.id(),
 			locationId: t.arg.id(),
 			locationDetail: t.arg.string(),
@@ -100,7 +106,7 @@ schemaBuilder.mutationFields((t) => ({
 		resolve: async (query, _root, args, ctx) => {
 			const user = ctx.mustBeLoggedIn();
 
-			const { id, containerId, locationId, aliases, ...rest } = args;
+			const { id, containerId, locationId, quantity, quantityDescription, aliases, ...rest } = args;
 			const cleaned = stripNulls(rest);
 
 			// Mutual exclusivity: setting one clears the other
@@ -114,11 +120,22 @@ schemaBuilder.mutationFields((t) => ({
 				locationFields.containerId = null;
 			}
 
+			const quantityFields: Record<string, unknown> = {};
+			if (quantity !== null && quantity !== undefined) {
+				quantityFields.quantity = quantity;
+				quantityFields.quantityDescription = null;
+			}
+			if (quantityDescription !== null && quantityDescription !== undefined) {
+				quantityFields.quantityDescription = quantityDescription;
+				quantityFields.quantity = null;
+			}
+
 			await db
 				.update(schema.item)
 				.set({
 					...cleaned,
 					...locationFields,
+					...quantityFields,
 					...(aliases ? { aliases } : {}),
 					updatedBy: user.sub
 				})

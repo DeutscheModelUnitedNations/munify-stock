@@ -15,7 +15,7 @@ export function isGlobalAdmin(ctx: {
 	hasRole: (role: string) => boolean;
 	mustBeLoggedIn: () => { email?: string | null };
 }): boolean {
-	if (ctx.hasRole('admin')) return true;
+	if (ctx.hasRole('admin') || ctx.hasRole('stock:admin')) return true;
 	try {
 		const user = ctx.mustBeLoggedIn();
 		return !!(user.email && isAdminEmail(user.email));

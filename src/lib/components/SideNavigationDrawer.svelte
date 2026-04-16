@@ -72,17 +72,5 @@
 				{@render children()}
 			</div>
 		</div>
-
-		<NavMenu>
-			<div class={expanded ? 'px-3' : 'hidden sm:block'}>
-				<NavMenuButton
-					href="/app"
-					icon="fa-gauge-high"
-					title={m.dashboard()}
-					bind:expanded
-					onnavigate={closeIfMobile}
-				/>
-			</div>
-		</NavMenu>
 	</div>
 </div>

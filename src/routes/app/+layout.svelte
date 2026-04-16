@@ -78,6 +78,13 @@
 		<SideNavigationDrawer bind:expanded={sidebarExpanded}>
 			<NavMenu>
 				<NavMenuButton
+					href="/app"
+					icon="fa-gauge-high"
+					title={m.dashboard()}
+					bind:expanded={sidebarExpanded}
+				/>
+
+				<NavMenuButton
 					href="/app/items"
 					icon="fa-boxes-stacked"
 					title={m.items()}
