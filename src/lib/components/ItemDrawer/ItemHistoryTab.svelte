@@ -26,11 +26,11 @@
 				<tr>
 					<td>
 						{#if log.action === 'INSERT'}
-							<span class="badge badge-sm badge-success">{m.created()}</span>
+							<span class="badge badge-soft badge-sm badge-success">{m.created()}</span>
 						{:else if log.action === 'UPDATE'}
-							<span class="badge badge-sm badge-info">{m.updated()}</span>
+							<span class="badge badge-soft badge-sm badge-info">{m.updated()}</span>
 						{:else}
-							<span class="badge badge-sm badge-error">{m.deleted()}</span>
+							<span class="badge badge-soft badge-sm badge-error">{m.deleted()}</span>
 						{/if}
 					</td>
 					<td>{log.fieldName ?? '--'}</td>

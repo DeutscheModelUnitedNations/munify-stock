@@ -67,7 +67,7 @@
 	<div class="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">
 		<div class="card bg-base-300">
 			<div class="card-body items-center text-center">
-				<i class="fa-duotone fa-boxes-stacked mb-2 text-4xl text-primary"></i>
+				<i class="fa-duotone fa-cubes mb-2 text-4xl text-primary"></i>
 				<h2 class="card-title">{m.featureInventoryTitle()}</h2>
 				<p class="text-sm opacity-70">
 					{m.featureInventoryDescription()}

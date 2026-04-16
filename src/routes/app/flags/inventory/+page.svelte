@@ -82,7 +82,9 @@
 							<p class="text-xs opacity-50">{new Date(session.date).toLocaleDateString()}</p>
 						</div>
 					</div>
-					<span class="badge badge-sm {statusBadge(session.status)}">{session.status}</span>
+					<span class="badge badge-soft badge-sm {statusBadge(session.status)}"
+						>{session.status}</span
+					>
 				</div>
 			</a>
 		{:else}

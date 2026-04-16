@@ -152,7 +152,7 @@
 </script>
 
 {#snippet customIdCell(customId: string | null)}
-	<span class="font-mono text-xs opacity-70">{customId ?? '--'}</span>
+	<span class="font-mono">{customId ?? '--'}</span>
 {/snippet}
 
 {#snippet nameCell(props: { id: string; name: string; quantity: number | null })}
@@ -170,7 +170,7 @@
 
 {#snippet badgeCell(value: string | null)}
 	{#if value}
-		<span class="badge badge-ghost badge-sm">{value}</span>
+		<span class="badge badge-soft badge-sm">{value}</span>
 	{:else}
 		<span class="opacity-40">--</span>
 	{/if}
@@ -178,7 +178,7 @@
 
 {#snippet containerCell(container: { id: string; label: string | null } | null)}
 	{#if container}
-		<button onclick={() => openContainerDrawer(container.id)} class="link link-hover">
+		<button onclick={() => openContainerDrawer(container.id)} class="link text-left link-hover">
 			<i class="fa-duotone fa-box mr-1 text-primary"></i>
 			{container.label ?? 'Container'}
 		</button>
@@ -191,14 +191,14 @@
 	{#if hasAnyFlag(item)}
 		<div class="flex flex-wrap gap-1">
 			{#each getActiveFlags(item) as flag}
-				<span class="badge gap-1 badge-sm {flag.badgeClass}">
+				<span class="badge gap-1 badge-soft badge-sm {flag.badgeClass}">
 					<i class={flag.icon}></i>
 					{flag.label()}
 				</span>
 			{/each}
 		</div>
 	{:else}
-		<span class="badge gap-1 badge-sm badge-success">
+		<span class="badge gap-1 badge-soft badge-sm badge-success">
 			<i class="fa-solid fa-check"></i>
 			{m.ok()}
 		</span>
@@ -207,7 +207,7 @@
 
 {#snippet commentCountCell(count: number)}
 	{#if count > 0}
-		<span class="badge badge-sm badge-warning">
+		<span class="badge badge-soft badge-sm badge-warning">
 			<i class="fa-solid fa-comment mr-1"></i>{count}
 		</span>
 	{:else}
@@ -218,7 +218,7 @@
 <div class="flex flex-col gap-4">
 	<div class="flex flex-wrap items-center justify-between gap-3">
 		<h1 class="text-2xl font-bold">
-			<i class="fa-duotone fa-boxes-stacked mr-2"></i>{m.items()}
+			<i class="fa-duotone fa-cubes mr-2"></i>{m.items()}
 		</h1>
 		<a href="/app/items/new" class="btn btn-sm btn-primary">
 			<i class="fa-solid fa-plus"></i>

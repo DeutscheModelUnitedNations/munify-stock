@@ -86,7 +86,7 @@
 
 				<NavMenuButton
 					href="/app/items"
-					icon="fa-boxes-stacked"
+					icon="fa-cubes"
 					title={m.items()}
 					bind:expanded={sidebarExpanded}
 				/>

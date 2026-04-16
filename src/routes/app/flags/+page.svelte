@@ -127,12 +127,12 @@
 {/snippet}
 
 {#snippet quantityCell(quantity: number | null)}
-	<span class="badge badge-sm badge-info">x{quantity ?? 0}</span>
+	<span class="badge badge-soft badge-sm badge-info">x{quantity ?? 0}</span>
 {/snippet}
 
 {#snippet containerCell(container: { id: string; label: string | null } | null)}
 	{#if container}
-		<span class="badge badge-outline badge-sm">{container.label ?? 'Box'}</span>
+		<span class="badge badge-soft badge-outline badge-sm">{container.label ?? 'Box'}</span>
 	{:else}
 		<span class="opacity-40">--</span>
 	{/if}

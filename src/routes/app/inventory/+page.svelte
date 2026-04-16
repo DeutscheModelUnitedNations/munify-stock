@@ -102,7 +102,9 @@
 									>{m.containersDone({ done: prog.done, total: prog.total })}</span
 								>
 							{/if}
-							<span class="badge badge-sm {statusBadge(session.status)}">{session.status}</span>
+							<span class="badge badge-soft badge-sm {statusBadge(session.status)}"
+								>{session.status}</span
+							>
 						</div>
 					</div>
 					{#if prog.total > 0}

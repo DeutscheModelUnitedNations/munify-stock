@@ -146,7 +146,7 @@
 		<!-- Container Checks -->
 		<div class="flex flex-col gap-3">
 			<h2 class="text-lg font-semibold">
-				<i class="fa-duotone fa-boxes-stacked mr-1"></i>
+				<i class="fa-duotone fa-cubes mr-1"></i>
 				{m.containers()} ({checks.length})
 			</h2>
 
@@ -178,7 +178,7 @@
 									</p>
 								</div>
 							</div>
-							<span class="badge badge-sm {checkStatusBadge(check.status)}">
+							<span class="badge badge-soft badge-sm {checkStatusBadge(check.status)}">
 								{check.status}
 							</span>
 						</div>

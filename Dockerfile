@@ -1,4 +1,4 @@
-FROM oven/bun:1.2-slim AS base
+FROM oven/bun:1.3-slim AS base
 
 FROM base AS dependencies
 WORKDIR /build/dependencies
@@ -26,7 +26,10 @@ COPY . .
 RUN bun run build
 RUN bun run check
 
-FROM node:24-slim AS release
+FROM base AS release
+
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app/release
 
 ARG VERSION
@@ -38,12 +41,12 @@ COPY ./drizzle ./drizzle/
 COPY ./drizzle.config.ts .
 COPY ./src/api/db/schema.ts ./src/api/db/schema.ts
 COPY --from=runtime-dependencies /build/dependencies .
+COPY --from=dependencies /build/dependencies/node_modules/drizzle-kit ./node_modules/drizzle-kit
+COPY --from=dependencies /build/dependencies/node_modules/.bin/drizzle-kit ./node_modules/.bin/drizzle-kit
 
-RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
-
-RUN chown -R node:node .
-USER node
+RUN chown -R bun:bun .
+USER bun
 ENV NODE_ENV=production
 EXPOSE 3000/tcp
 HEALTHCHECK --interval=15s --timeout=10s --retries=3 CMD curl -f http://0.0.0.0:3000/api/health || exit 1
-CMD ["sh", "-c", "./node_modules/.bin/drizzle-kit migrate && node ./index.js"]
+CMD ["sh", "-c", "./node_modules/.bin/drizzle-kit migrate && bun ./index.js"]

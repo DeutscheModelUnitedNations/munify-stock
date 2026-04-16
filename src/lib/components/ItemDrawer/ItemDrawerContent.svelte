@@ -121,7 +121,7 @@
 			{#if getActiveFlags(item).length > 0}
 				<div class="flex flex-wrap gap-2">
 					{#each getActiveFlags(item) as flag}
-						<span class="badge gap-1 {flag.badgeClass}">
+						<span class="badge gap-1 badge-soft {flag.badgeClass}">
 							<i class={flag.icon}></i>
 							{flag.label()}
 						</span>

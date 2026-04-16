@@ -58,9 +58,7 @@
 					<div class="flex items-center gap-2 overflow-hidden">
 						<i class="fa-solid fa-box shrink-0 text-primary"></i>
 						<span class="truncate text-xl font-bold">
-							{item.container.label ?? 'Unnamed'}{item.container.description
-								? ` — ${item.container.description}`
-								: ''}
+							{item.container.label ?? 'Unnamed'}
 						</span>
 					</div>
 				{/if}
@@ -196,7 +194,7 @@
 		>
 			<div class="flex flex-wrap gap-2">
 				{#each item.aliases as alias}
-					<span class="badge badge-outline">{alias}</span>
+					<span class="badge badge-soft badge-outline">{alias}</span>
 				{/each}
 			</div>
 		</DetailCard>

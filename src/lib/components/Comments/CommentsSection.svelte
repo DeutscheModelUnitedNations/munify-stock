@@ -103,7 +103,7 @@
 		>
 			<i class="fa-solid {showResolved ? 'fa-chevron-up' : 'fa-chevron-down'}"></i>
 			{showResolved ? m.hideResolved() : m.showResolved()}
-			<span class="badge badge-sm">{resolvedComments.length}</span>
+			<span class="badge badge-soft badge-sm">{resolvedComments.length}</span>
 		</button>
 
 		{#if showResolved}

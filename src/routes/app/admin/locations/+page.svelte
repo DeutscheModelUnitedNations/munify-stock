@@ -149,7 +149,7 @@
 								<p class="text-xs opacity-50">{loc.description}</p>
 							{/if}
 						</div>
-						<span class="badge badge-sm badge-info">
+						<span class="badge badge-soft badge-sm badge-info">
 							{m.containersAtLocation({ count: loc.containers?.length ?? 0 })}
 						</span>
 						<button

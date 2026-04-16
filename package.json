@@ -4,7 +4,7 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"dev": "docker compose up -d && vite dev",
+		"dev": "docker compose up -d && vite dev --host",
 		"dev:server": "vite dev",
 		"dev:docker": "docker compose up -d",
 		"build": "vite build",

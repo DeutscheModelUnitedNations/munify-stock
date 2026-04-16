@@ -107,7 +107,7 @@
 				{#if aliases.length > 0}
 					<div class="mb-2 flex flex-wrap gap-2">
 						{#each aliases as alias, i}
-							<span class="badge gap-1 badge-outline">
+							<span class="badge gap-1 badge-soft badge-outline">
 								{alias}
 								<button
 									type="button"
@@ -273,7 +273,7 @@
 				<fieldset class="fieldset">
 					<label class="label cursor-pointer justify-start gap-2">
 						<input type="checkbox" class="checkbox" bind:checked={flagState[flag.key]} />
-						<span class="badge gap-1 {flag.badgeClass}">
+						<span class="badge gap-1 badge-soft {flag.badgeClass}">
 							<i class={flag.icon}></i>
 							{flag.label()}
 						</span>

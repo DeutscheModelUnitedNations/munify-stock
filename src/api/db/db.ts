@@ -3,7 +3,8 @@ import * as schemaInternal from './schema';
 import { relations as relationsInternal } from './relations';
 import { configPrivate } from '$config/private';
 
-export const db = drizzle(configPrivate.DATABASE_URL, {
+export const db = drizzle({
+	connection: configPrivate.DATABASE_URL,
 	schema: schemaInternal,
 	relations: relationsInternal,
 	casing: 'snake_case'

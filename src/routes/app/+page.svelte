@@ -79,7 +79,7 @@
 		{
 			label: m.items(),
 			value: itemsList.length,
-			icon: 'fa-boxes-stacked',
+			icon: 'fa-cubes',
 			color: 'text-primary',
 			bg: 'bg-base-200',
 			href: '/app/items'
@@ -184,7 +184,7 @@
 										{m.containersAtLocation({ count: containerCount })}
 									</span>
 									<span class="flex items-center gap-1">
-										<i class="fa-solid fa-boxes-stacked text-primary"></i>
+										<i class="fa-solid fa-cubes text-primary"></i>
 										{m.itemsInContainers({ count: itemsInContainersCount })}
 									</span>
 									<span class="flex items-center gap-1">
@@ -261,11 +261,11 @@
 								<tr>
 									<td>
 										{#if log.action === 'INSERT'}
-											<span class="badge badge-xs badge-success">{m.created()}</span>
+											<span class="badge badge-soft badge-xs badge-success">{m.created()}</span>
 										{:else if log.action === 'UPDATE'}
-											<span class="badge badge-xs badge-info">{m.updated()}</span>
+											<span class="badge badge-soft badge-xs badge-info">{m.updated()}</span>
 										{:else}
-											<span class="badge badge-xs badge-error">{m.deleted()}</span>
+											<span class="badge badge-soft badge-xs badge-error">{m.deleted()}</span>
 										{/if}
 									</td>
 									<td class="text-xs">{log.tableName}</td>

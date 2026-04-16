@@ -216,7 +216,7 @@
 							<p class="truncate text-xs opacity-50">{result.subtitle}</p>
 						{/if}
 					</div>
-					<span class="badge badge-ghost badge-xs">{result.type}</span>
+					<span class="badge badge-ghost badge-soft badge-xs">{result.type}</span>
 				</button>
 			{:else}
 				<p class="p-4 text-center text-sm opacity-50">{m.noResults()}</p>

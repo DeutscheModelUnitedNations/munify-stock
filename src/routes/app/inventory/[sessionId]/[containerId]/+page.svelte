@@ -161,7 +161,7 @@
 						{m.completeCheck()}
 					</button>
 				{:else}
-					<span class="badge badge-success">Completed</span>
+					<span class="badge badge-soft badge-success">Completed</span>
 				{/if}
 			</div>
 		</div>
@@ -217,7 +217,7 @@
 									></i>
 								{/each}
 								{#if conflict}
-									<span class="badge gap-1 badge-xs badge-warning">
+									<span class="badge gap-1 badge-soft badge-xs badge-warning">
 										<i class="fa-solid fa-exclamation"></i>
 										{m.duplicate()}
 									</span>

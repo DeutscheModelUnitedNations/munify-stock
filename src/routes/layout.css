@@ -8,3 +8,7 @@
 
 @import '@deutschemodelunitednations/corporate-identity/css/theme/dmun-light';
 @import '@deutschemodelunitednations/corporate-identity/css/theme/dmun-dark';
+
+.badge {
+	white-space: nowrap;
+}

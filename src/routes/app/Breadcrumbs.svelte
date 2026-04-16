@@ -1,16 +1,29 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { page } from '$app/state';
+	import { Breadcrumbs } from 'sveltekit-breadcrumbs';
+	import type { PathSegment } from 'sveltekit-breadcrumbs';
+	import { locales } from '$lib/paraglide/runtime';
 	import * as m from '$lib/paraglide/messages';
+	import { page } from '$app/state';
+	import type { LayoutServerLoadEvent } from './$types';
 
-	interface Breadcrumb {
+	type Parameters = keyof LayoutServerLoadEvent['params'];
+
+	// The library matches URL segments against glob-discovered paths.
+	// Since glob paths are relative to this file (e.g. ./items/+page.svelte → "items"),
+	// but the actual URL starts with /app, we strip the /app prefix so they align.
+	let strippedUrl = $derived.by(() => {
+		const url = new URL(page.url.href);
+		url.pathname = url.pathname.replace(/^\/app/, '') || '/';
+		return url;
+	});
+
+	interface BreadcrumbConfig {
 		label: string;
 		icon: string;
-		href: string;
 	}
 
-	const segmentConfig: Record<string, { label: string; icon: string }> = {
-		items: { label: m.items(), icon: 'boxes-stacked' },
+	const breadcrumbs: Record<string, BreadcrumbConfig> = {
+		items: { label: m.items(), icon: 'cubes' },
 		containers: { label: m.containers(), icon: 'box' },
 		flags: { label: m.flags(), icon: 'flag' },
 		inventory: { label: m.inventory(), icon: 'clipboard-list' },
@@ -19,55 +32,45 @@
 		types: { label: m.types(), icon: 'tags' },
 		locations: { label: m.locations(), icon: 'location-dot' },
 		users: { label: m.users(), icon: 'users' },
-		new: { label: m['new'](), icon: 'plus' }
+		new: { label: m['new'](), icon: 'plus' },
+		sessionId: { label: m.inventory(), icon: 'clipboard-check' },
+		containerId: { label: m.containers(), icon: 'box' }
 	};
 
-	let breadcrumbs = $derived.by((): Breadcrumb[] => {
-		if (!browser) return [];
-		const pathname = page.url.pathname;
-		if (pathname === '/app') return [];
+	type PathSegmentType = PathSegment<Parameters, boolean>;
 
-		const segments = pathname
-			.replace(/^\/app\/?/, '')
-			.split('/')
-			.filter(Boolean);
-		const result: Breadcrumb[] = [];
-		let hrefAccum = '/app';
+	function getBreadcrumb(segment: PathSegmentType): BreadcrumbConfig {
+		const config = breadcrumbs[segment.key];
+		if (config) return config;
 
-		for (const segment of segments) {
-			hrefAccum += `/${segment}`;
-			const config = segmentConfig[segment];
-			if (config) {
-				result.push({ ...config, href: hrefAccum });
-			} else {
-				// Dynamic param (ID) — show as shortened ID
-				result.push({
-					label: segment.length > 8 ? segment.slice(0, 8) + '...' : segment,
-					icon: 'hashtag',
-					href: hrefAccum
-				});
-			}
-		}
-
-		return result;
-	});
+		return {
+			label: segment.key,
+			icon: 'question'
+		};
+	}
 </script>
 
-{#if browser}
-	<div class="flex items-center gap-1">
-		<a class="btn !no-underline btn-ghost btn-sm" href="/app" aria-label={m.home()}>
-			<i class="fa-duotone fa-home w-5 text-center"></i>
+<!-- ATTENTION: importObject is dir route specific. You cannot move this file without adjusting this
+import path via the parameter! -->
+<Breadcrumbs
+	importObject={import.meta.glob('./**/+page*.svelte')}
+	availableLanguageTags={locales as any as string[]}
+	delimiterSnippet="disabled"
+	currentUrl={strippedUrl}
+	homePath="/app"
+>
+	{#snippet pathSnippet(pathSegment: PathSegmentType)}
+		{@const breadcrumb = getBreadcrumb(pathSegment)}
+		{@const href = '/app' + new URL(pathSegment.href).pathname}
+		<a class="btn !no-underline btn-ghost btn-sm" {href}>
+			<i class="fa-duotone fa-{breadcrumb.icon}"></i>
+			<span class="ml-1">
+				{#if pathSegment.isParameter && pathSegment.value}
+					{pathSegment.value.length > 8 ? pathSegment.value.slice(0, 8) + '...' : pathSegment.value}
+				{:else}
+					{breadcrumb.label}
+				{/if}
+			</span>
 		</a>
-		{#each breadcrumbs as crumb, i}
-			<i class="fa-solid fa-chevron-right text-xs opacity-30"></i>
-			<a
-				class="btn !no-underline btn-ghost btn-sm"
-				href={crumb.href}
-				class:btn-active={i === breadcrumbs.length - 1}
-			>
-				<i class="fa-duotone fa-{crumb.icon}"></i>
-				<span class="ml-1">{crumb.label}</span>
-			</a>
-		{/each}
-	</div>
-{/if}
+	{/snippet}
+</Breadcrumbs>

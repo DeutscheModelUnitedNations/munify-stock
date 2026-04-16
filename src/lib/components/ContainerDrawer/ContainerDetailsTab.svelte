@@ -70,7 +70,11 @@
 								onclick={() => openItemDrawer(item.id)}
 								class="flex w-full items-center gap-2 rounded-lg p-2 text-left text-sm hover:bg-base-200"
 							>
-								<i class="fa-duotone fa-cube text-base-content/50"></i>
+								<i
+									class="fa-duotone {item.quantity && item.quantity > 1
+										? 'fa-cubes'
+										: 'fa-cube'} text-base-content/50"
+								></i>
 								<span class="flex-1">{item.name}</span>
 								{#each getActiveFlags(item) as flag}
 									<i
@@ -80,10 +84,10 @@
 									></i>
 								{/each}
 								{#if item.type}
-									<span class="badge badge-ghost badge-xs">{item.type.name}</span>
+									<span class="badge badge-ghost badge-soft badge-xs">{item.type.name}</span>
 								{/if}
 								{#if item.quantity != null}
-									<span class="badge badge-xs badge-info">x{item.quantity}</span>
+									<span class="badge badge-soft badge-xs badge-info">x{item.quantity}</span>
 								{/if}
 							</button>
 						</li>

@@ -135,7 +135,7 @@
 {/snippet}
 
 {#snippet customIdCell(customId: string | null)}
-	<span class="font-mono text-xs opacity-70">{customId ?? '--'}</span>
+	<span class="font-mono">{customId ?? '--'}</span>
 {/snippet}
 
 {#snippet descriptionCell(description: string | null)}
@@ -149,7 +149,7 @@
 
 {#snippet badgeCell(value: string | null)}
 	{#if value}
-		<span class="badge badge-ghost badge-sm">{value}</span>
+		<span class="badge badge-soft badge-sm">{value}</span>
 	{:else}
 		<span class="opacity-40">--</span>
 	{/if}
@@ -157,7 +157,7 @@
 
 {#snippet locationCell(locationName: string | null)}
 	{#if locationName}
-		<span class="badge badge-outline badge-sm">
+		<span class="badge badge-soft badge-sm">
 			<i class="fa-solid fa-location-dot mr-1"></i>{locationName}
 		</span>
 	{:else}
@@ -166,14 +166,14 @@
 {/snippet}
 
 {#snippet itemCountCell(count: number)}
-	<span class="badge badge-sm badge-info">
+	<span class="badge badge-soft badge-sm badge-info">
 		<i class="fa-solid fa-cubes mr-1"></i>{m.itemsInContainer({ count })}
 	</span>
 {/snippet}
 
 {#snippet commentCountCell(count: number)}
 	{#if count > 0}
-		<span class="badge badge-sm badge-warning">
+		<span class="badge badge-soft badge-sm badge-warning">
 			<i class="fa-solid fa-comment mr-1"></i>{count}
 		</span>
 	{:else}
