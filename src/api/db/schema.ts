@@ -105,8 +105,9 @@ export const item = pgTable(
 		locationDetail: text(),
 		isTemporarilyMoved: boolean().notNull().default(false),
 		temporaryLocation: text(),
-		warningFlag: boolean().notNull().default(false),
-		warningFlagNote: text(),
+		isDamaged: boolean().notNull().default(false),
+		needsReview: boolean().notNull().default(false),
+		isMissing: boolean().notNull().default(false),
 		aliases: text()
 			.array()
 			.notNull()

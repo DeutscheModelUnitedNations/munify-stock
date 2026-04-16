@@ -4,7 +4,6 @@
 	import DetailCard from '$lib/components/DetailCard.svelte';
 	import { openContainerDrawer } from '$lib/components/EntityDrawer/entityDrawerState.svelte';
 	import * as m from '$lib/paraglide/messages';
-
 	import type { ItemDetailView } from '$lib/types/views';
 
 	interface Props {

@@ -5,6 +5,7 @@
 	import type { ItemDetailView, ItemAuditLogView } from '$lib/types/views';
 	import type { NamedView, ContainerFormView } from '$lib/types/views';
 
+	import { getActiveFlags } from '$lib/itemFlags';
 	import ItemDetailsTab from './ItemDetailsTab.svelte';
 	import ItemHistoryTab from './ItemHistoryTab.svelte';
 	import ItemCommentsTab from './ItemCommentsTab.svelte';
@@ -35,8 +36,9 @@
 		value: true,
 		qrCode: true,
 		photo: true,
-		warningFlag: true,
-		warningFlagNote: true,
+		isDamaged: true,
+		needsReview: true,
+		isMissing: true,
 		locationDetail: true,
 		createdAt: true,
 		updatedAt: true,
@@ -95,18 +97,24 @@
 
 {#if item}
 	<div class="flex flex-col gap-4 overflow-y-auto p-4 sm:p-6">
-		<div class="flex items-center gap-3">
-			{#if item.quantity && item.quantity > 1}
-				<i class="fa-duotone fa-cubes text-2xl text-primary"></i>
-			{:else}
-				<i class="fa-duotone fa-cube text-2xl text-primary"></i>
-			{/if}
-			<h1 class="text-2xl font-bold">{item.name}</h1>
-			{#if item.warningFlag}
-				<span class="badge gap-1 badge-warning">
-					<i class="fa-solid fa-triangle-exclamation"></i>
-					{item.warningFlagNote ?? m.itemWarning()}
-				</span>
+		<div class="flex flex-col gap-2">
+			<div class="flex items-center gap-3">
+				{#if item.quantity && item.quantity > 1}
+					<i class="fa-duotone fa-cubes text-2xl text-primary"></i>
+				{:else}
+					<i class="fa-duotone fa-cube text-2xl text-primary"></i>
+				{/if}
+				<h1 class="text-2xl font-bold">{item.name}</h1>
+			</div>
+			{#if getActiveFlags(item).length > 0}
+				<div class="flex flex-wrap gap-2">
+					{#each getActiveFlags(item) as flag}
+						<span class="badge gap-1 {flag.badgeClass}">
+							<i class={flag.icon}></i>
+							{flag.label()}
+						</span>
+					{/each}
+				</div>
 			{/if}
 		</div>
 

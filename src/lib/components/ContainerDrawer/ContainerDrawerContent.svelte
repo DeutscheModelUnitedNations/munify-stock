@@ -5,6 +5,7 @@
 	import DetailCard from '$lib/components/DetailCard.svelte';
 	import { openItemDrawer } from '$lib/components/EntityDrawer/entityDrawerState.svelte';
 	import * as m from '$lib/paraglide/messages';
+	import { getActiveFlags } from '$lib/itemFlags';
 
 	import type { ContainerDetailView } from '$lib/types/views';
 
@@ -33,7 +34,9 @@
 			id: true,
 			name: true,
 			quantity: true,
-			warningFlag: true,
+			isDamaged: true,
+			needsReview: true,
+			isMissing: true,
 			type: { name: true }
 		}
 	});
@@ -109,12 +112,15 @@
 										onclick={() => openItemDrawer(item.id)}
 										class="flex w-full items-center gap-2 rounded-lg p-2 text-left text-sm hover:bg-base-200"
 									>
-										{#if item.warningFlag}
-											<i class="fa-solid fa-triangle-exclamation text-warning"></i>
-										{:else}
-											<i class="fa-duotone fa-cube text-base-content/50"></i>
-										{/if}
+										<i class="fa-duotone fa-cube text-base-content/50"></i>
 										<span class="flex-1">{item.name}</span>
+										{#each getActiveFlags(item) as flag}
+											<i
+												class="{flag.icon} text-xs {flag.badgeClass === 'badge-error'
+													? 'text-error'
+													: 'text-warning'}"
+											></i>
+										{/each}
 										{#if item.type}
 											<span class="badge badge-ghost badge-xs">{item.type.name}</span>
 										{/if}

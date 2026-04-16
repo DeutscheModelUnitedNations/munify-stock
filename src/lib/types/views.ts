@@ -36,7 +36,9 @@ export interface LabelView {
 export interface DashboardItemView {
 	id: string;
 	name: string;
-	warningFlag: boolean;
+	isDamaged: boolean;
+	needsReview: boolean;
+	isMissing: boolean;
 	isTemporarilyMoved: boolean;
 	temporaryLocation: string | null;
 }
@@ -73,8 +75,9 @@ export interface ItemListView {
 	customId: string | null;
 	name: string;
 	quantity: number | null;
-	warningFlag: boolean;
-	warningFlagNote: string | null;
+	isDamaged: boolean;
+	needsReview: boolean;
+	isMissing: boolean;
 	qrCode: string | null;
 	aliases: string[];
 	type: TypeView | null;
@@ -91,8 +94,9 @@ export interface ItemDetailView {
 	value: number | null;
 	qrCode: string | null;
 	photo: string | null;
-	warningFlag: boolean;
-	warningFlagNote: string | null;
+	isDamaged: boolean;
+	needsReview: boolean;
+	isMissing: boolean;
 	locationDetail: string | null;
 	createdAt: Date;
 	updatedAt: Date | null;
@@ -160,7 +164,9 @@ export interface ContainerDetailView {
 				id: string;
 				name: string;
 				quantity: number | null;
-				warningFlag: boolean;
+				isDamaged: boolean;
+				needsReview: boolean;
+				isMissing: boolean;
 				type: TypeView | null;
 		  }[]
 		| null;
@@ -243,7 +249,9 @@ export interface InventoryContainerItemView {
 	id: string;
 	name: string;
 	quantity: number | null;
-	warningFlag: boolean;
+	isDamaged: boolean;
+	needsReview: boolean;
+	isMissing: boolean;
 	type: TypeView | null;
 }
 

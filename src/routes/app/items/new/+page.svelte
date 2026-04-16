@@ -5,6 +5,7 @@
 	import FormFieldset from '$lib/components/FormFieldset.svelte';
 	import { openItemDrawer } from '$lib/components/EntityDrawer/entityDrawerState.svelte';
 	import * as m from '$lib/paraglide/messages';
+	import { ITEM_FLAGS } from '$lib/itemFlags';
 
 	import type { NamedView, ContainerFormView } from '$lib/types/views';
 
@@ -16,6 +17,7 @@
 	let isTemporarilyMoved = $state(false);
 	let aliases = $state<string[]>([]);
 	let aliasInput = $state('');
+	let flagState = $state({ isDamaged: false, needsReview: false, isMissing: false });
 
 	if (browser) {
 		const typesQuery = client.liveQuery.itemTypes({ id: true, name: true });
@@ -71,6 +73,9 @@
 					serialNumber,
 					isTemporarilyMoved,
 					temporaryLocation,
+					isDamaged: flagState.isDamaged,
+					needsReview: flagState.needsReview,
+					isMissing: flagState.isMissing,
 					aliases
 				},
 				id: true
@@ -252,6 +257,20 @@
 					/>
 				</fieldset>
 			{/if}
+		</FormFieldset>
+
+		<FormFieldset title={m.itemFlags()}>
+			{#each ITEM_FLAGS as flag}
+				<fieldset class="fieldset">
+					<label class="label cursor-pointer justify-start gap-2">
+						<input type="checkbox" class="checkbox" bind:checked={flagState[flag.key]} />
+						<span class="badge gap-1 {flag.badgeClass}">
+							<i class={flag.icon}></i>
+							{flag.label()}
+						</span>
+					</label>
+				</fieldset>
+			{/each}
 		</FormFieldset>
 
 		<div class="mt-2 flex gap-2">

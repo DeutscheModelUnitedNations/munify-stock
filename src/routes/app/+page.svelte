@@ -13,6 +13,7 @@
 		DashboardAuditLogView,
 		DashboardLocationView
 	} from '$lib/types/views';
+	import { hasAnyFlag } from '$lib/itemFlags';
 
 	let itemsList = $state<DashboardItemView[]>([]);
 	let containersList = $state<DashboardContainerView[]>([]);
@@ -24,7 +25,9 @@
 		const items = client.liveQuery.items({
 			id: true,
 			name: true,
-			warningFlag: true,
+			isDamaged: true,
+			needsReview: true,
+			isMissing: true,
 			isTemporarilyMoved: true,
 			temporaryLocation: true
 		});
@@ -99,10 +102,10 @@
 		},
 		{
 			label: m.warnings(),
-			value: itemsList.filter((i) => i.warningFlag).length,
+			value: itemsList.filter((i) => hasAnyFlag(i)).length,
 			icon: 'fa-triangle-exclamation',
 			color: 'text-warning',
-			bg: itemsList.filter((i) => i.warningFlag).length === 0 ? 'bg-success' : 'bg-warning',
+			bg: itemsList.filter((i) => hasAnyFlag(i)).length === 0 ? 'bg-success' : 'bg-warning',
 			href: '/app/items'
 		}
 	]);

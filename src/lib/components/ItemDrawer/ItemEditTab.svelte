@@ -2,6 +2,7 @@
 	import { client } from '$lib/generated-client/client';
 	import FormFieldset from '$lib/components/FormFieldset.svelte';
 	import * as m from '$lib/paraglide/messages';
+	import { ITEM_FLAGS } from '$lib/itemFlags';
 
 	import type { ItemDetailView, NamedView, ContainerFormView } from '$lib/types/views';
 
@@ -20,11 +21,17 @@
 	let isTemporarilyMoved = $state(false);
 	let aliases = $state<string[]>([]);
 	let aliasInput = $state('');
+	let flagState = $state({ isDamaged: false, needsReview: false, isMissing: false });
 
 	$effect(() => {
 		placementMode = item.containerId ? 'container' : 'location';
 		isTemporarilyMoved = item.isTemporarilyMoved ?? false;
 		aliases = [...(item.aliases ?? [])];
+		flagState = {
+			isDamaged: item.isDamaged,
+			needsReview: item.needsReview,
+			isMissing: item.isMissing
+		};
 	});
 
 	async function handleSubmit(e: SubmitEvent) {
@@ -56,6 +63,9 @@
 					locationId,
 					isTemporarilyMoved,
 					temporaryLocation,
+					isDamaged: flagState.isDamaged,
+					needsReview: flagState.needsReview,
+					isMissing: flagState.isMissing,
 					aliases
 				},
 				id: true
@@ -256,6 +266,20 @@
 					/>
 				</fieldset>
 			{/if}
+		</FormFieldset>
+
+		<FormFieldset title={m.itemFlags()}>
+			{#each ITEM_FLAGS as flag}
+				<fieldset class="fieldset">
+					<label class="label cursor-pointer justify-start gap-2">
+						<input type="checkbox" class="checkbox" bind:checked={flagState[flag.key]} />
+						<span class="badge gap-1 {flag.badgeClass}">
+							<i class={flag.icon}></i>
+							{flag.label()}
+						</span>
+					</label>
+				</fieldset>
+			{/each}
 		</FormFieldset>
 	</div>
 

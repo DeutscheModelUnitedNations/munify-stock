@@ -37,8 +37,9 @@ schemaBuilder.mutationFields((t) => ({
 			locationDetail: t.arg.string(),
 			isTemporarilyMoved: t.arg.boolean(),
 			temporaryLocation: t.arg.string(),
-			warningFlag: t.arg.boolean(),
-			warningFlagNote: t.arg.string(),
+			isDamaged: t.arg.boolean(),
+			needsReview: t.arg.boolean(),
+			isMissing: t.arg.boolean(),
 			aliases: t.arg.stringList()
 		},
 		resolve: async (query, _root, args, ctx) => {
@@ -91,8 +92,9 @@ schemaBuilder.mutationFields((t) => ({
 			locationDetail: t.arg.string(),
 			isTemporarilyMoved: t.arg.boolean(),
 			temporaryLocation: t.arg.string(),
-			warningFlag: t.arg.boolean(),
-			warningFlagNote: t.arg.string(),
+			isDamaged: t.arg.boolean(),
+			needsReview: t.arg.boolean(),
+			isMissing: t.arg.boolean(),
 			aliases: t.arg.stringList()
 		},
 		resolve: async (query, _root, args, ctx) => {

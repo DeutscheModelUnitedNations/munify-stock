@@ -4,6 +4,7 @@
 	import { page } from '$app/state';
 	import * as m from '$lib/paraglide/messages';
 	import { openItemDrawer } from '$lib/components/EntityDrawer/entityDrawerState.svelte';
+	import { getActiveFlags } from '$lib/itemFlags';
 
 	import type {
 		InventoryCheckDetailView,
@@ -39,7 +40,9 @@
 			id: true,
 			name: true,
 			quantity: true,
-			warningFlag: true,
+			isDamaged: true,
+			needsReview: true,
+			isMissing: true,
 			type: { name: true }
 		});
 		itemsQuery.subscribe((v) => {
@@ -206,9 +209,13 @@
 								>
 									{item.name}
 								</button>
-								{#if item.warningFlag}
-									<i class="fa-solid fa-triangle-exclamation text-xs text-warning"></i>
-								{/if}
+								{#each getActiveFlags(item) as flag}
+									<i
+										class="{flag.icon} text-xs {flag.badgeClass === 'badge-error'
+											? 'text-error'
+											: 'text-warning'}"
+									></i>
+								{/each}
 								{#if conflict}
 									<span class="badge gap-1 badge-xs badge-warning">
 										<i class="fa-solid fa-exclamation"></i>

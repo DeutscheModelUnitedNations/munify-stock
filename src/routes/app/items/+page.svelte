@@ -22,6 +22,7 @@
 	} from '$lib/components/TanStackTable';
 	import { DataTable } from '$lib/components/TanStackTable/ui';
 	import type { ItemListView } from '$lib/types/views';
+	import { hasAnyFlag, getActiveFlags } from '$lib/itemFlags';
 
 	let itemsList = $state<ItemListView[]>([]);
 
@@ -31,8 +32,9 @@
 			customId: true,
 			name: true,
 			quantity: true,
-			warningFlag: true,
-			warningFlagNote: true,
+			isDamaged: true,
+			needsReview: true,
+			isMissing: true,
 			qrCode: true,
 			aliases: true,
 			type: { name: true },
@@ -98,10 +100,10 @@
 			cell: ({ row }) => renderSnippet(containerCell, row.original.container)
 		},
 		{
-			id: 'status',
-			accessorFn: (row) => (row.warningFlag ? 'warning' : 'ok'),
-			header: m.status(),
-			cell: ({ row }) => renderSnippet(statusCell, row.original.warningFlag)
+			id: 'flags',
+			accessorFn: (row) => (hasAnyFlag(row) ? 'flagged' : 'ok'),
+			header: m.itemFlags(),
+			cell: ({ row }) => renderSnippet(flagsCell, row.original)
 		}
 	];
 
@@ -143,13 +145,15 @@
 {/snippet}
 
 {#snippet nameCell(props: { id: string; name: string; quantity: number | null })}
-	<button onclick={() => openItemDrawer(props.id)} class="link font-medium link-hover">
-		{#if props.quantity && props.quantity > 1}
-			<i class="fa-duotone fa-cubes mr-1 text-primary"></i>
-		{:else}
-			<i class="fa-duotone fa-cube mr-1 text-primary"></i>
-		{/if}
-		{props.name}
+	<button onclick={() => openItemDrawer(props.id)} class="link text-left font-medium link-hover">
+		<span class="inline-flex items-baseline gap-1">
+			<i
+				class="fa-duotone {props.quantity && props.quantity > 1
+					? 'fa-cubes'
+					: 'fa-cube'} shrink-0 text-primary"
+			></i>
+			<span>{props.name}</span>
+		</span>
 	</button>
 {/snippet}
 
@@ -172,12 +176,16 @@
 	{/if}
 {/snippet}
 
-{#snippet statusCell(warningFlag: boolean)}
-	{#if warningFlag}
-		<span class="badge gap-1 badge-sm badge-warning">
-			<i class="fa-solid fa-triangle-exclamation"></i>
-			{m.itemWarning()}
-		</span>
+{#snippet flagsCell(item: ItemListView)}
+	{#if hasAnyFlag(item)}
+		<div class="flex flex-wrap gap-1">
+			{#each getActiveFlags(item) as flag}
+				<span class="badge gap-1 badge-sm {flag.badgeClass}">
+					<i class={flag.icon}></i>
+					{flag.label()}
+				</span>
+			{/each}
+		</div>
 	{:else}
 		<span class="badge gap-1 badge-sm badge-success">
 			<i class="fa-solid fa-check"></i>
