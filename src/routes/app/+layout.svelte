@@ -56,7 +56,7 @@
 							<li class="menu-title text-xs">{data.user.email}</li>
 						{/if}
 						<li>
-							<a href="/app">
+							<a href="/app/dashboard">
 								<i class="fa-duotone fa-gauge-high w-4"></i>
 								{m.dashboard()}
 							</a>
@@ -78,7 +78,7 @@
 		<SideNavigationDrawer bind:expanded={sidebarExpanded}>
 			<NavMenu>
 				<NavMenuButton
-					href="/app"
+					href="/app/dashboard"
 					icon="fa-gauge-high"
 					title={m.dashboard()}
 					bind:expanded={sidebarExpanded}

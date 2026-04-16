@@ -23,6 +23,7 @@
 	}
 
 	const breadcrumbs: Record<string, BreadcrumbConfig> = {
+		dashboard: { label: m.dashboard(), icon: 'gauge-high' },
 		items: { label: m.items(), icon: 'cubes' },
 		containers: { label: m.containers(), icon: 'box' },
 		flags: { label: m.flags(), icon: 'flag' },
