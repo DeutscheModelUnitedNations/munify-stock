@@ -212,5 +212,20 @@
 	"status": "Status",
 
 	"editItem": "Artikel bearbeiten",
-	"soloItem": "Einzelartikel (ohne Behälter)"
+	"soloItem": "Einzelartikel (ohne Behälter)",
+
+	"addComment": "Kommentar hinzufügen",
+	"reply": "Antworten",
+	"replyingTo": "Antwort an {name}",
+	"resolve": "Erledigen",
+	"unresolve": "Wiedereröffnen",
+	"resolvedBy": "Erledigt von {name}",
+	"edited": "(bearbeitet)",
+	"resolvedCommentsCount": "{count} erledigte",
+	"showResolved": "Erledigte anzeigen",
+	"hideResolved": "Erledigte ausblenden",
+	"commentPlaceholder": "Kommentar schreiben...",
+	"replyPlaceholder": "Antwort schreiben...",
+	"editComment": "Bearbeiten",
+	"editContainer": "Behälter bearbeiten"
 }

@@ -212,5 +212,20 @@
 	"status": "Status",
 
 	"editItem": "Edit Item",
-	"soloItem": "Solo item (no container)"
+	"soloItem": "Solo item (no container)",
+
+	"addComment": "Add comment",
+	"reply": "Reply",
+	"replyingTo": "Replying to {name}",
+	"resolve": "Resolve",
+	"unresolve": "Reopen",
+	"resolvedBy": "Resolved by {name}",
+	"edited": "(edited)",
+	"resolvedCommentsCount": "{count} resolved",
+	"showResolved": "Show resolved",
+	"hideResolved": "Hide resolved",
+	"commentPlaceholder": "Write a comment...",
+	"replyPlaceholder": "Write a reply...",
+	"editComment": "Edit",
+	"editContainer": "Edit Container"
 }

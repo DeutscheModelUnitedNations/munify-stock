@@ -38,7 +38,8 @@
 			qrCode: true,
 			aliases: true,
 			type: { name: true },
-			container: { id: true, label: true }
+			container: { id: true, label: true },
+			comments: { id: true, resolved: true, parentId: true }
 		});
 		items.subscribe((v) => {
 			if (v) itemsList = v;
@@ -104,6 +105,16 @@
 			accessorFn: (row) => (hasAnyFlag(row) ? 'flagged' : 'ok'),
 			header: m.itemFlags(),
 			cell: ({ row }) => renderSnippet(flagsCell, row.original)
+		},
+		{
+			id: 'unresolvedComments',
+			accessorFn: (row) => row.comments?.filter((c) => !c.resolved && !c.parentId).length ?? 0,
+			header: m.comments(),
+			cell: ({ row }) =>
+				renderSnippet(
+					commentCountCell,
+					row.original.comments?.filter((c) => !c.resolved && !c.parentId).length ?? 0
+				)
 		}
 	];
 
@@ -191,6 +202,16 @@
 			<i class="fa-solid fa-check"></i>
 			{m.ok()}
 		</span>
+	{/if}
+{/snippet}
+
+{#snippet commentCountCell(count: number)}
+	{#if count > 0}
+		<span class="badge badge-sm badge-warning">
+			<i class="fa-duotone fa-comment mr-1"></i>{count}
+		</span>
+	{:else}
+		<span class="opacity-40">--</span>
 	{/if}
 {/snippet}
 

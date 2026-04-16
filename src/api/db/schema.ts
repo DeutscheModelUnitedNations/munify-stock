@@ -132,14 +132,34 @@ export const flag = pgTable('flag', {
 	notes: text()
 });
 
-export const comment = pgTable('comment', {
-	...defaultIdAndTimestamps,
-	itemId: text()
-		.notNull()
-		.references(() => item.id, { onDelete: 'cascade' }),
-	text: text().notNull(),
-	createdBy: text().references(() => user.id)
-});
+export const comment = pgTable(
+	'comment',
+	{
+		...defaultIdAndTimestamps,
+		// Target: exactly one of itemId or containerId (for top-level), or parentId (for replies)
+		itemId: text().references(() => item.id, { onDelete: 'cascade' }),
+		containerId: text().references(() => container.id, { onDelete: 'cascade' }),
+		// Threading: self-referencing FK, replies cascade-delete with parent
+		parentId: text(),
+		// Content
+		text: text().notNull(),
+		createdBy: text().references(() => user.id),
+		// Resolve state (only meaningful on top-level comments)
+		resolved: boolean().notNull().default(false),
+		resolvedAt: timestamp({ mode: 'date' }),
+		resolvedBy: text().references(() => user.id)
+	},
+	() => [
+		check(
+			'comment_target_exclusivity',
+			sql`NOT ("item_id" IS NOT NULL AND "container_id" IS NOT NULL)`
+		),
+		check(
+			'comment_must_have_target_or_parent',
+			sql`("item_id" IS NOT NULL OR "container_id" IS NOT NULL OR "parent_id" IS NOT NULL)`
+		)
+	]
+);
 
 export const auditLog = pgTable('audit_log', {
 	id: serial().primaryKey(),

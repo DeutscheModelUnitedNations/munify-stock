@@ -68,6 +68,35 @@ export interface DashboardAuditLogView {
 	changedBy: string | null;
 }
 
+// === Comments ===
+
+export interface CommentReplyView {
+	id: string;
+	text: string;
+	createdAt: Date;
+	updatedAt: Date | null;
+	createdByUser: { givenName: string; familyName: string } | null;
+}
+
+export interface CommentView {
+	id: string;
+	text: string;
+	createdAt: Date;
+	updatedAt: Date | null;
+	resolved: boolean;
+	resolvedAt: Date | null;
+	parentId: string | null;
+	resolvedByUser: { givenName: string; familyName: string } | null;
+	createdByUser: { givenName: string; familyName: string } | null;
+	replies: CommentReplyView[] | null;
+}
+
+export interface CommentCountView {
+	id: string;
+	resolved: boolean;
+	parentId: string | null;
+}
+
 // === Items ===
 
 export interface ItemListView {
@@ -82,6 +111,7 @@ export interface ItemListView {
 	aliases: string[];
 	type: TypeView | null;
 	container: LabelView | null;
+	comments: CommentCountView[] | null;
 }
 
 export interface ItemDetailView {
@@ -113,14 +143,7 @@ export interface ItemDetailView {
 	isTemporarilyMoved: boolean;
 	temporaryLocation: string | null;
 	aliases: string[];
-	comments:
-		| {
-				id: string;
-				text: string;
-				createdAt: Date;
-				createdByUser: { givenName: string; familyName: string } | null;
-		  }[]
-		| null;
+	comments: CommentView[] | null;
 }
 
 export interface ItemAuditLogView {
@@ -145,6 +168,7 @@ export interface ContainerListView {
 	type: TypeView | null;
 	location: TypeView | null;
 	items: IdView[] | null;
+	comments: CommentCountView[] | null;
 }
 
 export interface ContainerDetailView {
@@ -170,6 +194,7 @@ export interface ContainerDetailView {
 				type: TypeView | null;
 		  }[]
 		| null;
+	comments: CommentView[] | null;
 }
 
 export interface ContainerFormView {

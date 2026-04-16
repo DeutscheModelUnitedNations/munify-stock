@@ -47,6 +47,10 @@ export const relations = defineRelations(schema, (r) => ({
 			from: r.container.id,
 			to: r.item.containerId
 		}),
+		comments: r.many.comment({
+			from: r.container.id,
+			to: r.comment.containerId
+		}),
 		createdByUser: r.one.user({
 			from: r.container.createdBy,
 			to: r.user.id
@@ -89,8 +93,24 @@ export const relations = defineRelations(schema, (r) => ({
 			from: r.comment.itemId,
 			to: r.item.id
 		}),
+		container: r.one.container({
+			from: r.comment.containerId,
+			to: r.container.id
+		}),
+		parent: r.one.comment({
+			from: r.comment.parentId,
+			to: r.comment.id
+		}),
+		replies: r.many.comment({
+			from: r.comment.id,
+			to: r.comment.parentId
+		}),
 		createdByUser: r.one.user({
 			from: r.comment.createdBy,
+			to: r.user.id
+		}),
+		resolvedByUser: r.one.user({
+			from: r.comment.resolvedBy,
 			to: r.user.id
 		})
 	},

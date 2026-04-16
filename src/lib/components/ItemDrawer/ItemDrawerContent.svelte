@@ -8,7 +8,7 @@
 	import { getActiveFlags } from '$lib/itemFlags';
 	import ItemDetailsTab from './ItemDetailsTab.svelte';
 	import ItemHistoryTab from './ItemHistoryTab.svelte';
-	import ItemCommentsTab from './ItemCommentsTab.svelte';
+	import CommentsSection from '$lib/components/Comments/CommentsSection.svelte';
 	import ItemEditTab from './ItemEditTab.svelte';
 
 	interface Props {
@@ -54,7 +54,19 @@
 			id: true,
 			text: true,
 			createdAt: true,
-			createdByUser: { givenName: true, familyName: true }
+			updatedAt: true,
+			resolved: true,
+			resolvedAt: true,
+			parentId: true,
+			resolvedByUser: { givenName: true, familyName: true },
+			createdByUser: { givenName: true, familyName: true },
+			replies: {
+				id: true,
+				text: true,
+				createdAt: true,
+				updatedAt: true,
+				createdByUser: { givenName: true, familyName: true }
+			}
 		}
 	});
 	itemQuery.subscribe((v) => {
@@ -147,7 +159,9 @@
 			>
 				<i class="fa-duotone fa-comments mr-1"></i>
 				{m.comments()}
-				<span class="ml-1 badge badge-sm">{item.comments?.length ?? 0}</span>
+				<span class="ml-1 badge badge-sm"
+					>{item.comments?.filter((c) => !c.parentId && !c.resolved).length ?? 0}</span
+				>
 			</button>
 			<button
 				role="tab"
@@ -165,7 +179,7 @@
 		{:else if activeTab === 'history'}
 			<ItemHistoryTab {auditLogs} />
 		{:else if activeTab === 'comments'}
-			<ItemCommentsTab comments={item.comments ?? []} />
+			<CommentsSection comments={item.comments ?? []} entityId={item.id} entityType="item" />
 		{:else if activeTab === 'edit'}
 			<ItemEditTab
 				{item}

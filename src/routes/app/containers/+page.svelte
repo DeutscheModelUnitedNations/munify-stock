@@ -30,7 +30,8 @@
 			locationDetail: true,
 			type: { name: true },
 			location: { name: true },
-			items: { id: true }
+			items: { id: true },
+			comments: { id: true, resolved: true, parentId: true }
 		});
 		containers.subscribe((v) => {
 			if (v) containersList = v;
@@ -75,6 +76,16 @@
 			accessorFn: (row) => row.items?.length ?? 0,
 			header: m.items(),
 			cell: ({ row }) => renderSnippet(itemCountCell, row.original.items?.length ?? 0)
+		},
+		{
+			id: 'unresolvedComments',
+			accessorFn: (row) => row.comments?.filter((c) => !c.resolved && !c.parentId).length ?? 0,
+			header: m.comments(),
+			cell: ({ row }) =>
+				renderSnippet(
+					commentCountCell,
+					row.original.comments?.filter((c) => !c.resolved && !c.parentId).length ?? 0
+				)
 		}
 	];
 
@@ -152,6 +163,16 @@
 	<span class="badge badge-sm badge-info">
 		<i class="fa-solid fa-cubes mr-1"></i>{m.itemsInContainer({ count })}
 	</span>
+{/snippet}
+
+{#snippet commentCountCell(count: number)}
+	{#if count > 0}
+		<span class="badge badge-sm badge-warning">
+			<i class="fa-duotone fa-comment mr-1"></i>{count}
+		</span>
+	{:else}
+		<span class="opacity-40">--</span>
+	{/if}
 {/snippet}
 
 <div class="flex flex-col gap-4">
