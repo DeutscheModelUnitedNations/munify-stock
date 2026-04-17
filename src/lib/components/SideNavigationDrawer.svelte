@@ -51,7 +51,7 @@
 
 		<div class="flex-col {expanded ? 'px-6 pt-4' : 'hidden items-center p-1 sm:flex'}">
 			<div class="flex flex-col justify-center">
-				<i class="fa-duotone fa-warehouse mb-4 text-3xl"></i>
+				<i class="fa-duotone fa-box-isometric-tape mb-4 text-3xl"></i>
 				<div
 					class="text-md overflow-hidden font-normal duration-200 {expanded
 						? 'h-6 w-full'

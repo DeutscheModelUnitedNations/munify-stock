@@ -84,7 +84,7 @@
 				id: c.id,
 				title: c.label ?? 'Unnamed',
 				subtitle: [c.customId, c.description].filter(Boolean).join(' · '),
-				icon: 'fa-box',
+				icon: 'fa-box-isometric-tape',
 				href: `/app/containers/${c.id}`
 			});
 		}

@@ -79,7 +79,7 @@
 {#if container}
 	<div class="flex flex-col gap-4 overflow-y-auto p-4 sm:p-6">
 		<div class="flex items-center gap-3">
-			<i class="fa-duotone fa-box text-2xl text-primary"></i>
+			<i class="fa-duotone fa-box-isometric-tape text-2xl text-primary"></i>
 			<h1 class="text-2xl font-bold">{container.label ?? 'Unnamed Container'}</h1>
 		</div>
 

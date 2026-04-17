@@ -131,7 +131,7 @@
 				{#each containerTypes as type}
 					<div class="flex items-center justify-between rounded-lg bg-base-100 p-2">
 						<div class="flex items-center gap-2">
-							<i class="fa-duotone fa-box text-primary"></i>
+							<i class="fa-duotone fa-box-isometric-tape text-primary"></i>
 							<span class="text-sm font-medium">{type.name}</span>
 						</div>
 						<button

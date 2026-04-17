@@ -146,7 +146,7 @@
 				</a>
 				<div>
 					<h1 class="text-2xl font-bold">
-						<i class="fa-duotone fa-box mr-2 text-primary"></i>
+						<i class="fa-duotone fa-box-isometric-tape mr-2 text-primary"></i>
 						{check.container?.label ?? 'Container'}
 					</h1>
 					{#if check.container?.description}

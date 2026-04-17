@@ -6,13 +6,14 @@
 	import NavMenuSection from '$lib/components/NavMenu/NavMenuSection.svelte';
 	import SearchModal from '$lib/components/SearchModal.svelte';
 	import EntityDrawer from '$lib/components/EntityDrawer/EntityDrawer.svelte';
+	import ActiveInventoryFab from '$lib/components/ActiveInventoryFab.svelte';
 	import Breadcrumbs from './Breadcrumbs.svelte';
 	import * as m from '$lib/paraglide/messages';
 
 	let { data, children } = $props();
 
 	let sidebarExpanded = $state(true);
-	let searchModal: SearchModal;
+	let searchModal = $state<SearchModal | undefined>();
 </script>
 
 <div class="flex h-full w-full flex-col">
@@ -36,7 +37,7 @@
 			<div class="flex items-center gap-1">
 				<button
 					class="btn hidden gap-2 text-base-content/60 btn-ghost btn-sm sm:flex"
-					onclick={() => searchModal.openSearch()}
+					onclick={() => searchModal?.openSearch()}
 				>
 					<i class="fa-duotone fa-magnifying-glass"></i>
 					<span class="text-sm">{m.search()}</span>
@@ -92,7 +93,7 @@
 				/>
 				<NavMenuButton
 					href="/app/containers"
-					icon="fa-box"
+					icon="fa-box-isometric-tape"
 					title={m.containers()}
 					bind:expanded={sidebarExpanded}
 				/>
@@ -146,3 +147,4 @@
 
 <SearchModal bind:this={searchModal} />
 <EntityDrawer />
+<ActiveInventoryFab {searchModal} />

@@ -121,6 +121,7 @@
 	"noFlagsMatching": "Keine Flaggen für \"{query}\"",
 	"searchFlags": "Flaggen suchen...",
 
+	"goToActiveInventory": "Zur aktiven Inventur",
 	"inventorySessions": "Inventur-Sitzungen",
 	"flagInventorySessions": "Flaggen-Inventur-Sitzungen",
 	"newSession": "Neue Sitzung",
@@ -202,6 +203,8 @@
 	"temporaryLocation": "Vorübergehender Standort",
 	"temporaryLocationPlaceholder": "z.B. Bei Sarah zu Hause",
 	"onTheMove": "Unterwegs",
+	"itemsOnTheMove": "Artikel unterwegs",
+	"containersOnTheMove": "Behälter unterwegs",
 	"soloItemsAtLocation": "{count} Einzelartikel",
 	"itemsInContainers": "{count} Artikel in Behältern",
 	"noOnTheMove": "Keine Artikel oder Behälter aktuell unterwegs.",

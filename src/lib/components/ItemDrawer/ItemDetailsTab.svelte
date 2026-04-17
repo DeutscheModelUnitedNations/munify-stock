@@ -47,7 +47,7 @@
 			<div class="card-body gap-1 py-4">
 				{#if item.isTemporarilyMoved && item.temporaryLocation}
 					<div class="flex items-center gap-2 overflow-hidden">
-						<i class="fa-solid fa-box shrink-0 opacity-40"></i>
+						<i class="fa-solid fa-box-isometric-tape shrink-0 opacity-40"></i>
 						<span class="truncate text-xl font-bold line-through opacity-40">
 							{item.container.label ?? 'Unnamed'}
 						</span>
@@ -56,7 +56,7 @@
 					</div>
 				{:else}
 					<div class="flex items-center gap-2 overflow-hidden">
-						<i class="fa-solid fa-box shrink-0 text-primary"></i>
+						<i class="fa-solid fa-box-isometric-tape shrink-0 text-primary"></i>
 						<span class="truncate text-xl font-bold">
 							{item.container.label ?? 'Unnamed'}
 						</span>

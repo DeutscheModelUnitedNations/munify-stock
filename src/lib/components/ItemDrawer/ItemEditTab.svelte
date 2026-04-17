@@ -206,7 +206,7 @@
 						class:btn-active={placementMode === 'container'}
 						onclick={() => (placementMode = 'container')}
 					>
-						<i class="fa-solid fa-box"></i>
+						<i class="fa-solid fa-box-isometric-tape"></i>
 						{m.inContainer()}
 					</button>
 					<button

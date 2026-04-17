@@ -11,7 +11,7 @@ export const ITEM_FLAGS: ItemFlagDef[] = [
 	{
 		key: 'isDamaged',
 		label: () => m.flagDamaged(),
-		icon: 'fa-solid fa-heart-crack',
+		icon: 'fa-solid fa-wine-glass-crack',
 		badgeClass: 'badge-error'
 	},
 	{

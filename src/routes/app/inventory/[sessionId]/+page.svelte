@@ -159,7 +159,7 @@
 					<div class="card-body py-4">
 						<div class="flex items-center justify-between">
 							<div class="flex items-center gap-3">
-								<i class="fa-duotone fa-box text-xl text-primary"></i>
+								<i class="fa-duotone fa-box-isometric-tape text-xl text-primary"></i>
 								<div>
 									<p class="font-medium">
 										{check.container?.label ?? 'Unnamed'}
@@ -211,7 +211,7 @@
 									onclick={() => addContainer(container.id)}
 									disabled={addingContainer}
 								>
-									<i class="fa-duotone fa-box"></i>
+									<i class="fa-duotone fa-box-isometric-tape"></i>
 									{container.label ?? 'Unnamed'}
 									<span class="ml-auto badge badge-xs badge-info">
 										{m.itemsInContainer({ count: container.items?.length ?? 0 })}

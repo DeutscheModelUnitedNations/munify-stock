@@ -22,7 +22,7 @@
 <div class="navbar bg-base-100 px-6 py-3 shadow-md">
 	<div class="flex-1">
 		<a href="/" class="flex items-center gap-2 text-lg font-bold">
-			<i class="fa-duotone fa-warehouse text-primary"></i>
+			<i class="fa-duotone fa-box-isometric-tape text-primary"></i>
 			{m.appName()}
 		</a>
 	</div>

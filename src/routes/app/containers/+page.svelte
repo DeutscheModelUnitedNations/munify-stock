@@ -128,7 +128,7 @@
 		class="link text-left font-medium link-hover"
 	>
 		<span class="inline-flex items-baseline gap-1">
-			<i class="fa-duotone fa-box shrink-0 text-primary"></i>
+			<i class="fa-duotone fa-box-isometric-tape shrink-0 text-primary"></i>
 			<span>{props.label ?? 'Unnamed'}</span>
 		</span>
 	</button>
@@ -184,7 +184,7 @@
 <div class="flex flex-col gap-4">
 	<div class="flex flex-wrap items-center justify-between gap-3">
 		<h1 class="text-2xl font-bold">
-			<i class="fa-duotone fa-box mr-2"></i>{m.containers()}
+			<i class="fa-duotone fa-box-isometric-tape mr-2"></i>{m.containers()}
 		</h1>
 		<a href="/app/containers/new" class="btn btn-sm btn-primary">
 			<i class="fa-solid fa-plus"></i>

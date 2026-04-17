@@ -121,6 +121,7 @@
 	"noFlagsMatching": "No flags matching \"{query}\"",
 	"searchFlags": "Search flags...",
 
+	"goToActiveInventory": "Go to active inventory",
 	"inventorySessions": "Inventory Sessions",
 	"flagInventorySessions": "Flag Inventory Sessions",
 	"newSession": "New Session",
@@ -202,6 +203,8 @@
 	"temporaryLocation": "Temporary location",
 	"temporaryLocationPlaceholder": "e.g. At Sarah's home",
 	"onTheMove": "On the Move",
+	"itemsOnTheMove": "Items on the Move",
+	"containersOnTheMove": "Containers on the Move",
 	"soloItemsAtLocation": "{count} solo items",
 	"itemsInContainers": "{count} items in containers",
 	"noOnTheMove": "No items or containers currently on the move.",

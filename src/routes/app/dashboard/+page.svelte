@@ -13,7 +13,7 @@
 		DashboardAuditLogView,
 		DashboardLocationView
 	} from '$lib/types/views';
-	import { hasAnyFlag } from '$lib/itemFlags';
+	import { ITEM_FLAGS } from '$lib/itemFlags';
 
 	let itemsList = $state<DashboardItemView[]>([]);
 	let containersList = $state<DashboardContainerView[]>([]);
@@ -87,7 +87,7 @@
 		{
 			label: m.containers(),
 			value: containersList.length,
-			icon: 'fa-box',
+			icon: 'fa-box-isometric-tape',
 			color: 'text-secondary',
 			bg: 'bg-base-200',
 			href: '/app/containers'
@@ -99,15 +99,61 @@
 			color: 'text-accent',
 			bg: 'bg-base-200',
 			href: '/app/flags'
-		},
-		{
-			label: m.warnings(),
-			value: itemsList.filter((i) => hasAnyFlag(i)).length,
-			icon: 'fa-triangle-exclamation',
-			color: 'text-warning',
-			bg: itemsList.filter((i) => hasAnyFlag(i)).length === 0 ? 'bg-success' : 'bg-warning',
-			href: '/app/items'
 		}
+	]);
+
+	const TONE_BG = {
+		error: 'bg-error/15',
+		warning: 'bg-warning/15',
+		success: 'bg-success/15',
+		info: 'bg-info/15'
+	} as const;
+	const TONE_TEXT = {
+		error: 'text-error',
+		warning: 'text-warning',
+		success: 'text-success',
+		info: 'text-info'
+	} as const;
+	type Tone = keyof typeof TONE_BG;
+
+	const movedItems = $derived(itemsList.filter((i) => i.isTemporarilyMoved));
+	const movedContainers = $derived(containersList.filter((c) => c.isTemporarilyMoved));
+
+	const warningStats = $derived([
+		...ITEM_FLAGS.map((flag) => {
+			const value = itemsList.filter((i) => i[flag.key]).length;
+			const tone: Tone =
+				value === 0 ? 'success' : (flag.badgeClass.replace('badge-', '') as 'error' | 'warning');
+			return {
+				label: flag.label(),
+				value,
+				icon: flag.icon,
+				bg: TONE_BG[tone],
+				accent: TONE_TEXT[tone]
+			};
+		}),
+		(() => {
+			const value = movedContainers.length;
+			const tone: Tone = value === 0 ? 'success' : 'info';
+			return {
+				label: m.containersOnTheMove(),
+				value,
+				icon: 'fa-solid fa-box-isometric-tape',
+				bg: TONE_BG[tone],
+				accent: TONE_TEXT[tone]
+			};
+		})(),
+		(() => {
+			const value = movedItems.length;
+			const tone: Tone = value === 0 ? 'success' : 'info';
+			return {
+				label: m.itemsOnTheMove(),
+				value,
+				icon: 'fa-solid fa-cube',
+				bg: TONE_BG[tone],
+				accent: TONE_TEXT[tone]
+			};
+		})()
 	]);
 </script>
 
@@ -117,7 +163,7 @@
 	</h1>
 
 	<!-- Stats Cards -->
-	<div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+	<div class="grid grid-cols-3 gap-3">
 		{#each stats as stat}
 			<a
 				href={stat.href}
@@ -134,6 +180,58 @@
 				</div>
 			</a>
 		{/each}
+	</div>
+
+	<!-- Warnings & On the Move -->
+	<div class="card bg-base-100 shadow-sm">
+		<div class="card-body">
+			<h2 class="card-title text-base">
+				<i class="fa-duotone fa-triangle-exclamation"></i>
+				{m.warnings()}
+			</h2>
+			<div class="grid grid-cols-2 gap-2 md:grid-cols-3 xl:grid-cols-5">
+				{#each warningStats as warn}
+					<a href="/app/items" class="rounded-lg {warn.bg} p-3 transition hover:opacity-80">
+						<div class="flex items-center justify-between gap-2">
+							<div class="min-w-0">
+								<p class="truncate text-xs opacity-70">{warn.label}</p>
+								<p class="text-2xl font-bold {warn.accent}">{warn.value}</p>
+							</div>
+							<i class="{warn.icon} text-2xl {warn.accent}"></i>
+						</div>
+					</a>
+				{/each}
+			</div>
+
+			{#if movedItems.length > 0 || movedContainers.length > 0}
+				<div class="divider my-1 text-xs">
+					<i class="fa-duotone fa-person-walking-luggage mr-1"></i>
+					{m.onTheMove()}
+				</div>
+				<div class="flex flex-col gap-1">
+					{#each movedContainers as container}
+						<button
+							onclick={() => openContainerDrawer(container.id)}
+							class="flex w-full items-center gap-2 rounded-lg p-2 text-left text-sm hover:bg-base-200"
+						>
+							<i class="fa-solid fa-box-isometric-tape text-secondary"></i>
+							<span class="flex-1 font-medium">{container.label ?? 'Unnamed'}</span>
+							<span class="text-xs opacity-60">{container.temporaryLocation}</span>
+						</button>
+					{/each}
+					{#each movedItems as item}
+						<button
+							onclick={() => openItemDrawer(item.id)}
+							class="flex w-full items-center gap-2 rounded-lg p-2 text-left text-sm hover:bg-base-200"
+						>
+							<i class="fa-solid fa-cube text-primary"></i>
+							<span class="flex-1 font-medium">{item.name}</span>
+							<span class="text-xs opacity-60">{item.temporaryLocation}</span>
+						</button>
+					{/each}
+				</div>
+			{/if}
+		</div>
 	</div>
 
 	<!-- Quick Actions -->
@@ -160,7 +258,7 @@
 				{m.locationOverview()}
 			</h2>
 			{#if locationsList.length > 0}
-				<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+				<div class="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
 					{#each locationsList as loc}
 						{@const containerCount = loc.containers?.length ?? 0}
 						{@const itemsInContainersCount =
@@ -180,7 +278,7 @@
 								{/if}
 								<div class="mt-1 flex flex-wrap gap-3 text-sm">
 									<span class="flex items-center gap-1">
-										<i class="fa-solid fa-box text-secondary"></i>
+										<i class="fa-solid fa-box-isometric-tape text-secondary"></i>
 										{m.containersAtLocation({ count: containerCount })}
 									</span>
 									<span class="flex items-center gap-1">
@@ -201,42 +299,6 @@
 			{/if}
 		</div>
 	</div>
-
-	<!-- On the Move -->
-	{#if itemsList.some((i) => i.isTemporarilyMoved) || containersList.some((c) => c.isTemporarilyMoved)}
-		{@const movedItems = itemsList.filter((i) => i.isTemporarilyMoved)}
-		{@const movedContainers = containersList.filter((c) => c.isTemporarilyMoved)}
-		<div class="card bg-base-100 shadow-sm">
-			<div class="card-body">
-				<h2 class="card-title text-base">
-					<i class="fa-duotone fa-person-walking-luggage"></i>
-					{m.onTheMove()}
-				</h2>
-				<div class="flex flex-col gap-2">
-					{#each movedContainers as container}
-						<button
-							onclick={() => openContainerDrawer(container.id)}
-							class="flex w-full items-center gap-2 rounded-lg p-2 text-left text-sm hover:bg-base-200"
-						>
-							<i class="fa-solid fa-box text-secondary"></i>
-							<span class="flex-1 font-medium">{container.label ?? 'Unnamed'}</span>
-							<span class="text-xs opacity-60">{container.temporaryLocation}</span>
-						</button>
-					{/each}
-					{#each movedItems as item}
-						<button
-							onclick={() => openItemDrawer(item.id)}
-							class="flex w-full items-center gap-2 rounded-lg p-2 text-left text-sm hover:bg-base-200"
-						>
-							<i class="fa-solid fa-cube text-primary"></i>
-							<span class="flex-1 font-medium">{item.name}</span>
-							<span class="text-xs opacity-60">{item.temporaryLocation}</span>
-						</button>
-					{/each}
-				</div>
-			</div>
-		</div>
-	{/if}
 
 	<!-- Recent Activity -->
 	<div class="card bg-base-100 shadow-sm">

@@ -179,7 +179,7 @@
 {#snippet containerCell(container: { id: string; label: string | null } | null)}
 	{#if container}
 		<button onclick={() => openContainerDrawer(container.id)} class="link text-left link-hover">
-			<i class="fa-duotone fa-box mr-1 text-primary"></i>
+			<i class="fa-duotone fa-box-isometric-tape mr-1 text-primary"></i>
 			{container.label ?? 'Container'}
 		</button>
 	{:else}
