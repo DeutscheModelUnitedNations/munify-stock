@@ -8,6 +8,7 @@ bun.lockb
 # Generated
 /src/lib/paraglide/
 /src/lib/generated-client/
+/project.inlang/
 
 # Miscellaneous
 /static/
