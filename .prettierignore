@@ -12,3 +12,4 @@ bun.lockb
 # Miscellaneous
 /static/
 /drizzle/
+/.claude/

@@ -4,6 +4,7 @@
 	import { locales } from '$lib/paraglide/runtime';
 	import * as m from '$lib/paraglide/messages';
 	import { page } from '$app/state';
+	import { SvelteURL } from 'svelte/reactivity';
 	import type { LayoutServerLoadEvent } from './$types';
 
 	type Parameters = keyof LayoutServerLoadEvent['params'];
@@ -12,7 +13,7 @@
 	// Since glob paths are relative to this file (e.g. ./items/+page.svelte → "items"),
 	// but the actual URL starts with /app, we strip the /app prefix so they align.
 	let strippedUrl = $derived.by(() => {
-		const url = new URL(page.url.href);
+		const url = new SvelteURL(page.url.href);
 		url.pathname = url.pathname.replace(/^\/app/, '') || '/';
 		return url;
 	});
