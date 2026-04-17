@@ -1,8 +1,5 @@
 node_modules
 
-# Generated
-/src/lib/generated-client
-
 # Output
 .output
 .vercel
