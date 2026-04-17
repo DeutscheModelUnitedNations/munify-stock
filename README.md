@@ -90,6 +90,60 @@ See `.env.example` for all required variables. Key ones:
 | `LOGTO_API_RESOURCE`          | API resource identifier for M2M token validation |
 | `ACCESS_DOMAIN_WHITELIST`     | Comma-separated email domains for app access     |
 
+## CSV Inventory Import
+
+Bulk-import items, containers, locations, and container types from a CSV file. The CSV is expected to have the following columns (in order):
+
+| Column | Header                  | Description                                |
+| ------ | ----------------------- | ------------------------------------------ |
+| 0      | Nummer                  | Custom ID for the item                     |
+| 1      | Artikel                 | Item name                                  |
+| 2      | Anzahl                  | Quantity (number or free-text description) |
+| 3      | Verpackung              | Container name (e.g. "Kiste 11") or "lose" |
+| 4      | Kistenbezeichnung       | Container label                            |
+| 5      | Standort                | Location name (e.g. "Kiel")                |
+| 6      | Anmerkung               | Notes / description                        |
+| 7      | Alternative Schlagworte | Comma-separated aliases                    |
+
+### Via API
+
+Send a POST request to `/api/csv-import`. Requires admin authentication (session or M2M bearer token with `admin` / `stock:admin` role).
+
+```bash
+# Multipart form upload
+curl -X POST https://localhost:5173/api/csv-import \
+  -H "Authorization: Bearer <token>" \
+  -F file=@inventory.csv
+
+# Raw CSV body
+curl -X POST https://localhost:5173/api/csv-import \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: text/csv" \
+  --data-binary @inventory.csv
+```
+
+The endpoint returns a JSON summary:
+
+```json
+{
+	"locationsCreated": 3,
+	"containerTypesCreated": 5,
+	"containersCreated": 24,
+	"itemsCreated": 142,
+	"itemsFailed": 0,
+	"rowsSkipped": 7,
+	"errors": []
+}
+```
+
+### Via CLI script
+
+```bash
+bun run scripts/import-inventory.ts <path-to-csv>
+```
+
+Set `DATABASE_URL` to override the default PostgreSQL connection (`postgres://postgres:postgres@localhost:5432/postgres`).
+
 ## FAQ
 
 **Can I use this for my conference outside of DMUN?**
